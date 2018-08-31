@@ -1,2 +1,2 @@
 # sdc-dot-cvp-ingest
-SDC/CVP data ingest facilities into the Data Lake
+SDC/CVP tools to support data ingest into the Data Lake
