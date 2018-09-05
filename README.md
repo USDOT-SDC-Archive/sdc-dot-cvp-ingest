@@ -21,6 +21,8 @@ The following diagram represents a high level overview of the SDC Platform:
 
 ![SDC System Diagram](https://github.com/usdot-jpo-sdc/sdc-dot-cvp-staging/blob/master/images/sdc_system_diagram.jpg)
 
+Looking from the bottom up, the [ITS ODE service](https://github.com/usdot-jpo-ode) performs near-real time data ingest via Kinesis Firehose, while data ingest trhough S3 ingest buckets are done either with automated scripts or manually.
+
 ## AWS S3 Data Ingest Repository
 
 There are 2 methods of ingesting data sets into the SDC: near-real time ingest through a Kinesis Firehose endpoint, and data ingest through an S3 ingest bucket.
