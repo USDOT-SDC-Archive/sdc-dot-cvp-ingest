@@ -17,6 +17,10 @@ The SDC platform supports two major roles:
 * Data Providers: These are entities that provide data hosted on the SDC platform. The data provider establishes the data protection needs and acceptable use terms for the data analysts. 
 * Data Analysts: These are entities that conduct analysis of the datasets hosted in the SDC system.  Note that analysts can bring their own data and tools into the SDC system.
 
+The following diagram represents a high level overview of the SDC Platform:
+
+![SDC System Diagram](https://github.com/usdot-jpo-sdc/sdc-dot-cvp-staging/blob/master/images/sdc_system_diagram.jpg)
+
 ## AWS S3 Data Ingest Repository
 
 There are 2 methods of ingesting data sets into the SDC: near-real time ingest through a Kinesis Firehose endpoint, and data ingest through an S3 ingest bucket.
