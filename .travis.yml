@@ -11,5 +11,5 @@ addons:
         token:
             secure: "DTK4TEJebNxGbBzmJKTEPMNacgY3UqPNCcfggAyQmqkSU+Ch+S0bkq0bpBjPYsyaC4f0KB3h7befFGUg9TF8/xwM4gXYHf3oeYVpgZHxpEAd8xKlxVg2rjluYLsbbpSPEJG+EOW172gfznRjdCjNPIyB6zzrHGqJf86iZJtJJl7EahhDAo/85N8eqboSsAb0ip8DjB4LGlA2jG4P7rzErGMhX04qGztymEq6HzCe00diyuCTsDlXGy/vvIUkCA3YB2dbYcRkjxYW+2I0KAYA+Hcvy8yI1nTmrViqWXq/5RByHs5bxWSG20/3ZzP1GnYbG+9OFYzmZmn6aCtz5jCERyoGDOvAGK2W7AhjJYnL+JkHk0emCd4EQoiZFDXkgFt+lzZTP7Dd6WzmiHlsQxCsdERVBRxvJEKhS7ak/X2p24pthjdWZNY9yjQhHykiwHtnnwbaeKMqtfGv1udupdVVL2qVo3z72UClFR3hT1nIF3LlMLTWcLAlY39/D9uidDFdAepVn5xeJlR+GjYvCkNYxc+U2u2lH8zkXdQgGMj8/KwebrvD2Tjz0W6hCk0zT5fVJeOXfNUkur8+ajolKAnG252Pnw+iSBFcOsGvckxmExPX7d01OHQjb3GjxqbnFrW7r95P8w/kKDp7ODDkXlM7AvCtKBT86nMwMtgCoDN/jU8="
 script: 
-     - python dataProcessor.py
-     - sonar-scanner
+    - python dataProcessor.py
+    - sonar-scanner
