@@ -12,4 +12,4 @@ addons:
              secure: "rLvVNVg+wvOQigH+R53ABIjs8p4QYGF7o3t6RdFnvhX0U1dHkLWbJnp8u9XMDiwcIf02AmYugOb/dZaNkgFynnQyB+5319SSichPmRhbExmACHSa0SxPD4bDRG/Bg3XvGAr4ig2Sstxj6vwSBEe66akeIhnxN9GMR2/N35VC4rNs84aqhK1juJYzRzKhEfPnGGwaRtsbAi+tO3rUDrth8ZXPsyzFrw1+48t+I+dB5S4PQAZXg+Gr8zBD00Ep5VnZSm0HOMKeskMBF0F8Ry0uWjHvCzMoJcvCWrgPNercClDmxRH4FHHv2d+IFMOzwom2D24vNIGg5mf+yv0j7//b6wV+QdcwfQPvkBrw5XE66Fd2LPcxgt1RB+Dc1YOijvHvzz8uliIPoaoYrUp/nkH6WXHlkOtElrpsoD05JDHokS4W5BndskST93N1kRInnddmObvCtAvg6rbRVhPvQya/aVaeHe2p/zBflM/Trwhvs+2FzDHS7VgvbcoVFr1BIH08MuMEvPfYv6dpiT/tmWw+WOvdMzU5CpBL7/g/0205ufPJPS+yvRZfxckVxkTpRZxsJXbZuTnvl2w+ChSqEzI1U2kLBpoej6eLnzQGWtEWskJBKfIG0+YsIoJV+qseBQAfnMSBuvMsdHgkqW/5BQ6guYajCpH4bLJmsf44EZIxzrU="
 script: 
     - python dataProcessor.py
-    - sonar-scanner
+    - sonar-scanner -X
