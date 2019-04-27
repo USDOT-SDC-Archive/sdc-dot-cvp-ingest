@@ -5,6 +5,7 @@ install:
     - pip install boto3
     - pip install utils
     - pip install moto
+    - pip install coverage
 addons:
     sonarcloud:
         organization: "usdot-jpo-sdc"
@@ -12,4 +13,7 @@ addons:
              secure: "XuWW+JOQcubnUlMQSrEaPGSV4iGc6BpizXdVxR8TqJ2+2v0dsnWPasQNRLVMf56WCqT8CCQzmRn9KCO5VwjN3Cip6uObvLHzcddxG2KOYAMaLVOqAky2FbVinq8Mx3gH51lv4U8eJ6P/xzFelbsTTwWt+v4cnwCOFlANRt9FxsOZTBRL02GxknAjM8D0/A3oOpRci4+1+x4JaFOzDa+JN0GJ2Qa4oAxRMLLseZBfA+TZbNPI20jQmMVsIttw4qL4lrDj7/MPzqRPZsibbVIfC5II33NkLuBGY68KX518nGioqVQT6hSihmoOXNxfyNnLu4xOFdl+u5LsCmtM4HBOfMjjtAmdZEEarJvzXUFU09NP8jFiCopZgiVfRBkp7kLuN6UHxsE3j+ILdSaY78i9sI92i91VvW0PBufY73DEVXpVTZEM6/xaDQqu8O6Ga02JJg2lK8KF4JpM8NCW551NhqwHC5kEY/jrK5rljPn3DeGRhNaBiBI1LftxXmrQua4djtIDOO9w5I3lZc+6zuzws4mViN6BvDg71/XzhsxQ4JQ/4AtWB7dnJngmVLnGWZc8JU9YAQGRtn2+X0uVSlzFgH5PCl+IdMErYj0KNO0zOoHAQhK9me3p9JH80eEcLx4Kma1KiD8sSMYRQ0VcqbLUrqlTcsVPeX2ue5YAr05D+go="
 script: 
     - python dataProcessor.py
+    - coverage run dataProcessor.py
+    - coverage report -m
+    - coverage html
     - sonar-scanner
