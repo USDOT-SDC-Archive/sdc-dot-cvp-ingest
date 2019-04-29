@@ -17,5 +17,6 @@ script:
     - python dataProcessor.py
     - coverage erase
     - coverage run dataProcessor-tests.py
+    - coverage run utils-tests.py
     - coverage xml -i
     - sonar-scanner
