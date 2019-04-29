@@ -14,6 +14,6 @@ addons:
 script: 
     - python dataProcessor.py
     - coverage erase
-    - coverage run dataProcessor-test.py
+    - coverage run dataProcessor-tests.py
     - coverage xml -i
     - sonar-scanner
