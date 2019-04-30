@@ -52,7 +52,7 @@ class TestLambdaHandler(unittest.TestCase):
         key = 'bsm/file.csv'
 
         self.basic_template(source_bucket, target_bucket, target_key, key)
-
+    @mock_s3
     def basic_template(self, source_bucket, target_bucket, target_key, key):
         os.environ['TARGET_DATA_BUCKET'] = target_bucket
         os.environ['TARGET_DATA_KEY'] = target_key
@@ -67,13 +67,8 @@ class TestLambdaHandler(unittest.TestCase):
         bucket.put_object(Body='ola', Key=key)
 
         bucket = conn.Bucket(target_bucket)
-        count = 0
-        for obj in bucket.objects.all():
-            print(obj)
-            count += 1
-
+        count = len(list(bucket.objects.all()))
         self.assertTrue(count == 0, "Should be empty")
-
         # Act
         dataProcessor.lambda_handler(self.event_data, '')
 
