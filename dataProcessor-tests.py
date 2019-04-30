@@ -69,6 +69,7 @@ class TestLambdaHandler(unittest.TestCase):
         bucket = conn.Bucket(target_bucket)
         count = len(list(bucket.objects.all()))
         self.assertTrue(count == 0, "Should be empty")
+
         # Act
         dataProcessor.lambda_handler(self.event_data, '')
 
