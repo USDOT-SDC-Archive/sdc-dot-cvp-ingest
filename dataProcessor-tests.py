@@ -1,4 +1,4 @@
-import unittest
+import pytest
 import dataProcessor
 import json
 import logging
@@ -7,8 +7,9 @@ import boto3
 import os
 from moto import mock_s3
 
-class TestLambdaHandler(unittest.TestCase):
-    def setUp(self):
+
+class TestLambdaHandler(object):
+    def setup(self):
         json_event_data = """{
           "Records":
           [
@@ -52,6 +53,7 @@ class TestLambdaHandler(unittest.TestCase):
         key = 'bsm/file.csv'
 
         self.basic_template(source_bucket, target_bucket, target_key, key)
+
     @mock_s3
     def basic_template(self, source_bucket, target_bucket, target_key, key):
         os.environ['TARGET_DATA_BUCKET'] = target_bucket
@@ -68,7 +70,7 @@ class TestLambdaHandler(unittest.TestCase):
 
         bucket = conn.Bucket(target_bucket)
         count = len(list(bucket.objects.all()))
-        self.assertTrue(count == 0, "Should be empty")
+        assert count == 0, "Should be empty"
 
         # Act
         dataProcessor.lambda_handler(self.event_data, '')
@@ -78,20 +80,15 @@ class TestLambdaHandler(unittest.TestCase):
         count = 0
         for obj in bucket.objects.all():
             print(obj)
-            self.assertTrue(obj.key.startswith(target_key), "wrong destination folder")
-            self.assertTrue(obj.key.endswith(os.path.basename(key)), "invalid filename")
+            assert obj.key.startswith(target_key), "wrong destination folder"
+            assert obj.key.endswith(os.path.basename(key)), "invalid filename"
             count += 1
 
-        self.assertTrue(count == 1, "Should have new file")
-
+        assert count == 1, "Should have new file"
 
     @mock_s3
     def test_lambda_handler_with_wrong_event_data(self):
         conn = boto3.resource('s3')
         conn.create_bucket(Bucket='asd')
 
-        self.assertRaises(KeyError, dataProcessor.lambda_handler, self.wrong_event_data, '')
-
-
-if __name__ == '__main__':
-    unittest.main()
+        pytest.raises(KeyError)
