@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/usdot-jpo-sdc/sdc-dot-cvp-ingest.svg?branch=master)](https://travis-ci.com/usdot-jpo-sdc/sdc-dot-cvp-ingest)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=usdot-jpo-sdc_sdc-dot-cvp-ingest&metric=alert_status)](https://sonarcloud.io/dashboard?id=usdot-jpo-sdc_sdc-dot-cvp-ingest)
 # sdc-dot-cvp-ingest
 US Department of Transportation (USDOT) Intelligent Transportation Systems Secure Data Commons (ITS SDC). Connected Vehicle Pilots (CVP) tools to support data ingest into the Data Lake.
 
