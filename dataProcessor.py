@@ -32,15 +32,11 @@ def lambda_handler(event, context):
     logging.info('key: {}'.format(key))
 
     try:
-        target_bucket = os.environ['TARGET_DATA_BUCKET']
-        target_data_key = os.environ['TARGET_DATA_KEY']
-        
-        # Check in the target bucket and key are valid
-        if(target_bucket is None):
-            logging.error('target_bucket is null')
-            return
-        if(target_data_key is None):
-            logging.error('target_data_key is null')
+        try:
+            target_bucket = os.environ['TARGET_DATA_BUCKET']
+            target_data_key = os.environ['TARGET_DATA_KEY']
+        except Exception as e:
+            logging.error('Check TARGET_DATA_BUCKET and TARGET_DATA_KEY Environment Variables')
             return
         if(s3res.Bucket(target_bucket).creation_date is None):
             logging.error('target bucket doesn\'t exist')

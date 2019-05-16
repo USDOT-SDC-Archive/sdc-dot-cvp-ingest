@@ -20,7 +20,7 @@ class TestLambdaHandler(object):
                 },
                 "object": {
                   "key": "bsm/file.csv",
-                  "size": 190000000
+                  "size": 7878787878
                 }
               }
             }
@@ -51,24 +51,6 @@ class TestLambdaHandler(object):
         source_bucket = 'test'
         target_bucket = 'random_target_bucket'
         target_key = 'cv/thea/'
-        key = 'bsm/file.csv'
-        
-        self.basic_template(source_bucket, target_bucket, target_key, key)
-        
-    @mock_s3
-    def test_lambda_handler_null_target_bucket(self):
-        source_bucket = 'test'
-        target_bucket = None
-        target_key = 'cv/wydot/'
-        key = 'bsm/file.csv'
-        
-        self.basic_template(source_bucket, target_bucket, target_key, key)
-        
-    @mock_s3
-    def test_lambda_handler_null_target_key(self):
-        source_bucket = 'test'
-        target_bucket = 'random_target_bucket'
-        target_key = None
         key = 'bsm/file.csv'
         
         self.basic_template(source_bucket, target_bucket, target_key, key)
