@@ -22,6 +22,9 @@ def lambda_handler(event, context):
     s3 = boto3.client('s3')
     s3res = boto3.resource('s3')
 
+    # define the size of each data chunk, currently at 100MB
+    size = event['Records'][0]['s3']['object']['size']
+    
     # Get the object from the event and show its content
     source_bucket = event['Records'][0]['s3']['bucket']['name']
     key = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'])  # .encode('utf8')
@@ -65,8 +68,6 @@ def lambda_handler(event, context):
         # create a multipart upload connection and store the upload id for the connection
         multiId = (s3.create_multipart_upload(Bucket=target_bucket, Key=target_key, ServerSideEncryption='AES256'))['UploadId']
         
-        # define the size of each data chunk, currently at 100MB
-        size = event['Records'][0]['s3']['object']['size']
         currentSize = size
         logging.info('Copy File Size: {}'.format(size))
         chunkSize = 100000000 # 100MB
