@@ -103,7 +103,6 @@ def lambda_handler(event, context):
             response = s3.delete_object(Bucket=source_bucket, Key=key)
         
         logging.info('Succeeded')
-        
     except Exception as e:
         logging.error(e)
         logging.error("Received error: {0}".format(e), exc_info=True)
