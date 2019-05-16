@@ -34,18 +34,18 @@ def lambda_handler(event, context):
     try:
         target_bucket = os.environ['TARGET_DATA_BUCKET']
         target_data_key = os.environ['TARGET_DATA_KEY']
-		
-		# Check in the target bucket and key are valid
-        if (target_bucket is None):
+        
+        # Check in the target bucket and key are valid
+        if(target_bucket is None):
             logging.error('target_bucket is null')
             return
-        if (target_data_key is None):
+        if(target_data_key is None):
             logging.error('target_data_key is null')
             return
-		if (s3res.Bucket(target_bucket).creation_date is None):
+        if(s3res.Bucket(target_bucket).creation_date is None):
             logging.error('target bucket doesn\'t exist')
             return
-		
+        
         target_key = os.path.join(target_data_key, key)
         copy_source = {'Bucket': source_bucket, 'Key': key}
         
