@@ -55,7 +55,7 @@ class TestLambdaHandler(object):
 
         self.basic_template(source_bucket, target_bucket, target_key, key)
 		
-	@mock_s3
+    @mock_s3
     def test_lambda_handler_null_target_bucket(self):
         source_bucket = 'test'
         target_bucket = None
@@ -64,7 +64,7 @@ class TestLambdaHandler(object):
 
         self.basic_template(source_bucket, target_bucket, target_key, key)
 	
-	@mock_s3
+    @mock_s3
     def test_lambda_handler_null_target_key(self):
         source_bucket = 'test'
         target_bucket = 'random_target_bucket'
