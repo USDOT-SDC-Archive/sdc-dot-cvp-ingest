@@ -10,9 +10,7 @@ install:
     - pip install coverage
  branches:
     only:
-        - master
-        - develop
-        - sdc-82
+        - /.*/
 addons:
     sonarcloud:
         organization: "usdot-jpo-sdc"
