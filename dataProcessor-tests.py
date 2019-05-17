@@ -55,6 +55,16 @@ class TestLambdaHandler(object):
         self.wrong_event_data = json.loads(json_wrong_event_data)
 
     @mock_s3
+    def test_lambda_handler_no_environ_variable(self):
+        source_bucket = 'test'
+        target_bucket = 'random_target_bucket'
+        target_key = 'cv/thea/'
+        key = 'bsm/file.csv'
+        bodyfile = 'ola'
+
+        self.error_template(source_bucket, target_bucket, target_key, key, bodyfile, self.small_event_data, False, True)
+
+    @mock_s3
     def test_lambda_handler_wydot(self):
         source_bucket = 'test'
         target_bucket = 'random_target_bucket'
@@ -90,16 +100,6 @@ class TestLambdaHandler(object):
         bodyfile = 'ola'
 
         self.error_template(source_bucket, target_bucket, target_key, key, bodyfile, self.large_event_data, True, True)
-
-    @mock_s3
-    def test_lambda_handler_no_environ_variable(self):
-        source_bucket = 'test'
-        target_bucket = 'random_target_bucket'
-        target_key = 'cv/thea/'
-        key = 'bsm/file.csv'
-        bodyfile = 'ola'
-
-        self.error_template(source_bucket, target_bucket, target_key, key, bodyfile, self.small_event_data, False, True)
 
     @mock_s3
     def test_lambda_handler_thea(self):
