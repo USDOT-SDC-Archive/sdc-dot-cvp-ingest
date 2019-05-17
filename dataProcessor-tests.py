@@ -187,5 +187,5 @@ class TestLambdaHandler(object):
         # Act
         try:
             dataProcessor.lambda_handler(self_event_data, '')
-        except EntityTooSmall as e:
+        except Exception as e:
             assert e is not None
