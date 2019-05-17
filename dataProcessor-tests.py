@@ -123,10 +123,9 @@ class TestLambdaHandler(object):
         os.truncate("110mbfile.txt", 110000000)
 
         f = open("110mbfile.txt", "rb")
-        bodyfile = f
-        f.close()
 
-        self.basic_template(source_bucket, target_bucket, target_key, key, bodyfile, self.large_event_data)
+        self.basic_template(source_bucket, target_bucket, target_key, key, f, self.large_event_data)
+        f.close()
 
     @mock_s3
     def basic_template(self, source_bucket, target_bucket, target_key, key, bodyfile, self_event_data):
