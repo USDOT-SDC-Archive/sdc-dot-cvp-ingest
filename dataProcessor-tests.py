@@ -129,7 +129,7 @@ class TestLambdaHandler(object):
         self.basic_template(source_bucket, target_bucket, target_key, key, bodyfile, self.large_event_data)
 
     @mock_s3
-    def basic_template(self, source_bucket, target_bucket, target_key, key, body, self_event_data):
+    def basic_template(self, source_bucket, target_bucket, target_key, key, bodyfile, self_event_data):
         os.environ['TARGET_DATA_BUCKET'] = target_bucket
         os.environ['TARGET_DATA_KEY'] = target_key
 
@@ -165,7 +165,7 @@ class TestLambdaHandler(object):
         assert count == 0, "Should be empty"
 
     @mock_s3
-    def error_template(self, source_bucket, target_bucket, target_key, key, body, self_event_data, define_target_bucket, correct_bucket):
+    def error_template(self, source_bucket, target_bucket, target_key, key, bodyfile, self_event_data, define_target_bucket, correct_bucket):
         if define_target_bucket:
             os.environ['TARGET_DATA_KEY'] = target_key
             os.environ['TARGET_DATA_BUCKET'] = target_bucket
