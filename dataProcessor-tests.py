@@ -187,5 +187,5 @@ class TestLambdaHandler(object):
         # Act
         try:
             dataProcessor.lambda_handler(self_event_data, '')
-        except Exception as e:
+        except ClientError as e:
             assert e is not None
