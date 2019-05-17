@@ -8,6 +8,9 @@ import os
 from moto import mock_s3
 
 class TestLambdaHandler(object):
+    def __init__(self):
+        self.setup()
+
     def setup(self):
         json_small_event_data = """{
           "Records":
@@ -25,7 +28,7 @@ class TestLambdaHandler(object):
             }
           ]
         }""".encode('utf-8')
-        self.samll_event_data = json.loads(json_small_event_data)
+        self.small_event_data = json.loads(json_small_event_data)
         
         json_large_event_data = """{
           "Records":
