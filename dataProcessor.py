@@ -42,6 +42,14 @@ def lambda_handler(event, context):
         if (s3res.Bucket(source_bucket).creation_date is None):
             logging.error('source bucket doesn\'t exist')
             return
+        if not s3res.Bucket(source_bucket):
+            print("Source Bucket access failed")
+            logging.error('source bucket doesn\'t exist')
+
+        if not s3res.Bucket(target_bucket):
+            print("Target Bucket access failed")
+            logging.error('source bucket doesn\'t exist')
+			
         if (target_bucket is None):
             logging.error('target_bucket is null')
             return
