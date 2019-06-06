@@ -8,19 +8,16 @@ install:
     - pip install utils
     - pip install moto
     - pip install coverage
- branches:
+branches:
     only:
-     - master
-     - develop
-     - sdc-82
+        - master
+        - develop
 addons:
     sonarcloud:
         organization: "usdot-jpo-sdc"
-        token:
-             secure:$SONAR_TOKEN
 script: 
     - coverage erase
     - coverage run -m pytest dataProcessor-tests.py
     - coverage run --append -m pytest utils-tests.py
     - coverage xml -i
-    - sonar-scanner
+    - sonar-scanner -X -D sonar.login=$SONAR_TOKEN
