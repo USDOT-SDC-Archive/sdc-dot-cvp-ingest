@@ -18,4 +18,4 @@ script:
     - coverage run -m pytest dataProcessor-tests.py
     - coverage run --append -m pytest utils-tests.py
     - coverage xml -i
-    - sonar-scanner
+    - sonar-scanner -X -D sonar.login=$SONAR_TOKEN
