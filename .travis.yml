@@ -11,8 +11,6 @@ install:
 addons:
     sonarcloud:
         organization: "usdot-jpo-sdc"
-        token:
-               secure:$SONAR_TOKEN
 script: 
     - coverage erase
     - coverage run -m pytest dataProcessor-tests.py
