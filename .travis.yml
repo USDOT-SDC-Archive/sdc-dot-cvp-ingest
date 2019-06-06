@@ -8,6 +8,10 @@ install:
     - pip install utils
     - pip install moto
     - pip install coverage
+branches:
+    only:
+        - master
+        - develop
 addons:
     sonarcloud:
         organization: "usdot-jpo-sdc"
