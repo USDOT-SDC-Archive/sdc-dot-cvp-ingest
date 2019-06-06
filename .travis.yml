@@ -12,7 +12,7 @@ addons:
     sonarcloud:
         organization: "usdot-jpo-sdc"
         token:
-             secure:$SONAR_TOKEN
+              secure: "QlFmbPA5pupiF2RfleI1JQB4/N7IQQN3t1ZMuWpmqPlJRr22+zbfHKZdBCf59ZfKUyewoJYb6tU8r61dchFLXX7AfAwWjrni7UzqURCaQgHHQx+q8dKx1xDyHB/wP22SjAQUqixiKyc8hhSQ0fZTPExsYkEt+pWNuuI+w209fZrvs1JT8yNUfVj8kg+8X2wzSMhRVDM1xaHZW9fBIB9I532w0DnJAipSKPXmGbynDQ8zvKsLBYyTpEcEVS8y4kkf5PKsoYsrCx6RN4HiVA98h75DMWnGlGsS1Cy4vB9S0M4oogyL6J/0dpbSn6Xj9D5HKrInmGC3wqdwgYPizsGC7wRRA3KTRMFVFlXQEHfsWk3dn3zei/TohxKXI20aR3ibNGDwWfy8wqCS2lf1Ozxvb05pFbzewl9UjgSHLGT61jgN/dxSZ+aihY8Oi+Gjd2fk62kcByJXLBvodxGbp41OResif4871Jhe81tuus7tUsoBJkY2HxKFjZnY4nq2OkyEvwi1iGKPQUasAIF0QnbvPuIICaCBKrEKjYSdpzciDUE+6MCveGdtHYKbAEw0WBHlCk+ymkVA425FHRw8WnOYJU7i2OYaE6wWKUJg4RwcziwOxcFImIWKCF1LPCewXy5MoJ45C4j3Sjyq3IbLmanAdP27z4f+FB4WgidfhTfuZqo="
 script: 
     - coverage erase
     - coverage run -m pytest dataProcessor-tests.py
