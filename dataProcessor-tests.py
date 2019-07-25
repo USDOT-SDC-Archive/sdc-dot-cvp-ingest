@@ -54,6 +54,14 @@ class TestLambdaHandler(object):
 
         self.basic_template(source_bucket, target_bucket, target_key, key)
 
+
+    @mock_s3
+    def test_lambda_handler_check_bucket_nonexist(self):
+        os.environ['TARGET_DATA_BUCKET'] = 'random_target_bucket'
+        os.environ['TARGET_DATA_KEY'] = 'key'
+        dataProcessor.lambda_handler(self.event_data, '')
+
+
     @mock_s3
     def basic_template(self, source_bucket, target_bucket, target_key, key):
         os.environ['TARGET_DATA_BUCKET'] = target_bucket
