@@ -20,7 +20,7 @@ class TestLambdaHandler(object):
                 },
                 "object": {
                   "key": "bsm/file.csv",
-                  "Size": 250000000
+                  "size": 3
                 }
               }
             }
