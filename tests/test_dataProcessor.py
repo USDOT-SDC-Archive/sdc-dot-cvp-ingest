@@ -3,7 +3,7 @@ import pytest
 from unittest.mock import patch, MagicMock
 from lambdas import dataProcessor
 from moto import mock_s3
-from test_common_functions import CreateBucketPlaceFile
+from tests import CreateBucketPlaceFile
 from botocore.exceptions import ClientError, ParamValidationError
 
 # global variables
