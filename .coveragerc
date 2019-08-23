@@ -29,7 +29,6 @@ omit=
     # Ignore specific source code folders
     **/common/**
     **/__init__.py
-    tests/__init__.py
 
 [html]
 directory = html_coverage_reports
