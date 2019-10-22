@@ -13,13 +13,13 @@ logger = logging.getLogger()
 
 
 def get_datebased_folder_name():
-    currenttime = datetime.now()
-    return '{}/{}/{}/'.format(currenttime.strftime('%Y'),
-                              currenttime.strftime('%m'),
-                              currenttime.strftime('%d'))
+    current_time = datetime.now()
+    return '{}/{}/{}/'.format(current_time.strftime('%Y'),
+                              current_time.strftime('%m'),
+                              current_time.strftime('%d'))
 
 
-def determine_target_key(target_data_key, source_key):
+def determine_target_key(source_key):
     filename = ntpath.basename(source_key)
     path = os.path.dirname(source_key)
 
