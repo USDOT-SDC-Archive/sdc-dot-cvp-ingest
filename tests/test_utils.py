@@ -18,23 +18,23 @@ class TestCVPepUtils(object):
         target_data_key = 'cv/wydot/'
 
         assert target_data_key + "BSM/{}file.txt".format(date_str) == utils.determine_target_key(
-            target_data_key, target_data_key + "BSM/file.txt"
+            target_data_key + "BSM/file.txt"
         )
 
         target_data_key = 'cv/thea/'
 
         assert target_data_key + "BSM/{}file.txt".format(date_str) == utils.determine_target_key(
-            target_data_key, target_data_key + "BSM/file.txt"
+            target_data_key + "BSM/file.txt"
         )
         assert target_data_key + "TIM/{}file.txt".format(date_str) == utils.determine_target_key(
-            target_data_key, target_data_key + "TIM/file.txt"
+            target_data_key + "TIM/file.txt"
         )
         assert target_data_key + "SPAT/{}file.txt".format(date_str) == utils.determine_target_key(
-            target_data_key, target_data_key + "SPAT/file.txt"
+            target_data_key + "SPAT/file.txt"
         )
         assert target_data_key + "SOMETHING_ELSE/{}file.txt".format(date_str) == utils.determine_target_key(
-            target_data_key, target_data_key + "SOMETHING_ELSE/file.txt"
+            target_data_key + "SOMETHING_ELSE/file.txt"
         )
         assert target_data_key + "SOMETHING_ELSE/{}bsm_file.txt".format(date_str) == utils.determine_target_key(
-            target_data_key, target_data_key + "SOMETHING_ELSE/bsm_file.txt"
+            target_data_key + "SOMETHING_ELSE/bsm_file.txt"
         )

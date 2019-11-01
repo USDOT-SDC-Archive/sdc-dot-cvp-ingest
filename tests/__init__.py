@@ -16,7 +16,7 @@ class CreateBucketPlaceFile:
         self.target_key = None
         if os.environ.get('TARGET_DATA_KEY'):
             target_key_part = os.path.join(os.environ['TARGET_DATA_KEY'], key)
-            self.target_key = utils.determine_target_key(os.environ['TARGET_DATA_KEY'], target_key_part)
+            self.target_key = utils.determine_target_key(target_key_part)
 
         self.source_bucket = source_bucket
         if self.source_bucket is not None:
