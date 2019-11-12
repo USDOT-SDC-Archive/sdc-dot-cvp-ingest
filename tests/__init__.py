@@ -1,7 +1,7 @@
 import os
 import boto3
 import urllib.parse
-from lambdas import utils
+import utils
 from moto import mock_s3
 from botocore.validate import ParamValidationError
 

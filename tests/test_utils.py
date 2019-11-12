@@ -1,4 +1,4 @@
-from lambdas import utils
+import utils
 import datetime
 
 

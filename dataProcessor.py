@@ -12,14 +12,14 @@ import os
 import urllib.parse
 
 import boto3
-from lambdas import utils
+import utils
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)  # necessary to make sure aws is logging
 logger.info('Loading function')
 
 
-def lambda_handler(event, *args, **kwargs):
+def lambda_handler(event, context):
     """AWS Lambda handler. processes manual uploads to manual ingest bucket"""
     s3 = boto3.client('s3')
     s3res = boto3.resource('s3')

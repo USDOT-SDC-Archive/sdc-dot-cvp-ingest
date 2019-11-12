@@ -2,7 +2,6 @@
 branch = True
 include=
     # Include the following source code folders
-    **/lambdas/**
     **/tests/**
 
 [report]
