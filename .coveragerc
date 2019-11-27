@@ -3,6 +3,8 @@ branch = True
 include=
     # Include the following source code folders
     **/tests/**
+    dataProcessor.py
+    utils.py
 
 [report]
 exclude_lines=
