@@ -2,8 +2,9 @@
 branch = True
 include=
     # Include the following source code folders
-    **/lambdas/**
     **/tests/**
+    dataProcessor.py
+    utils.py
 
 [report]
 exclude_lines=

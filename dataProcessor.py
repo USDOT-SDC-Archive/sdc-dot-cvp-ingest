@@ -8,10 +8,11 @@
 from __future__ import print_function
 
 import logging
-import boto3
-import urllib.parse
 import os
-from lambdas import utils
+import urllib.parse
+
+import boto3
+import utils
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)  # necessary to make sure aws is logging
@@ -59,7 +60,7 @@ def lambda_handler(event, context):
             logging.error('copy_source is null')
             return
 
-        target_key = utils.determine_target_key(target_data_key, target_key)
+        target_key = utils.determine_target_key(target_key)
 
         logging.info('target_bucket: {}'.format(target_bucket))
         logging.info('target_data_key: {}'.format(target_data_key))
@@ -94,8 +95,8 @@ def lambda_handler(event, context):
             # send the range of bytes from the file to AWS
             response = s3.upload_part_copy(CopySourceRange=csr, CopySource=copy_source, Bucket=target_bucket,
                                            Key=target_key, UploadId=multi_id, PartNumber=i)
-            eTag = response['CopyPartResult']['ETag']
-            parts.append({'ETag': eTag, 'PartNumber': i})
+            e_tag = response['CopyPartResult']['ETag']
+            parts.append({'ETag': e_tag, 'PartNumber': i})
             i += 1
 
         # create multipart upload parts dictionary
