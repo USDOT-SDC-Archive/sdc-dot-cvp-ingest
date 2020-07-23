@@ -5,29 +5,6 @@
 # license         : MIT license
 # ==============================================================================
 #
-# Notes:
-#   Maximum file size that can be supported is dependant
-#     on S3 -> S3 copy speed, and the lambda timeout
-#     2020/06/04: Measured S3 -> S3 transfer speed exceeded 2GB/min
-#     so a timeout set to 15 minutes should support up-to 30GB files
-#
-# Environment variables:
-#   COPY_CHUNK_SIZE_BYTES:
-#       How much data to copy in each multi-part copy request (in bytes)
-#       2020/06/04:  1073741824    (1GB)
-#   MAX_SIZE_SUPPORTED_BYTES:
-#       Maximum file size supported (in bytes)
-#       2020/06/04:  32212254720    (30GB)
-#   TARGET_DATA_BUCKET:
-#       Target S3: bucket (i.e. SDC "Data Lake" bucket)
-#       2020/06/04:  test-dot-sdc-raw-submissions-911061262852-us-east-1
-#   TARGET_DATA_KEY:
-#       Target S3: object prefix key (i.e. "folder")
-#       2020/06/04:  3btsffa/atri/
-#
-# Lambda Basic Settings configuration:
-#   Timeout: 15 Minutes  (for 30GB max file size)
-#   Memory:  128MB
 
 from __future__ import print_function
 
