@@ -3,3 +3,4 @@ utils
 moto
 coverage
 pytest
+pytest-mock==1.13.0
