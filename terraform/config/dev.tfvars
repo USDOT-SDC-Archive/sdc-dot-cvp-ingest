@@ -10,7 +10,7 @@ data_providers = [{
     team = "cvp-nyc"
     name = "cvpep-nyc"
     data_lake_destination = "cv/nyc/"
-}/*,
+},
 {
     ingest_bucket = "dev-dot-sdc-cvp-thea-ingest"
     team = "cvp-thea"
@@ -26,13 +26,12 @@ data_providers = [{
     data_lake_destination = "cv/wydot/"
 },
 {
-# NOTE: these values will change ATRI lower environment resources away from "test-" to "dev-".
-# It appears things were misnamed from the beginning according to Darren
     ingest_bucket = "dev-dot-sdc-btsffa-atri-ingest"
     project = "fmi"
     team = "fmi-atri"
     name = "btsffa-atri"
     data_lake_destination = "btsffa/atri/"
-}*/]
+}]
 data_lake_bucket = "dev-dot-sdc-raw-submissions-911061262852-us-east-1"
 lambda_binary_bucket = "dev-dot-sdc-regional-lambda-bucket-911061262852-us-east-1"
+lambda_error_actions = ["arn:aws:sns:us-east-1:911061262852:dev-email-aaron-test-topic"]

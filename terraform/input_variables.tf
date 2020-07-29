@@ -26,18 +26,23 @@ variable "subnet_ids" {
 }
 
 variable "data_providers" {
-    type = list(object({
-        ingest_bucket = string
-        name = string
-        project = string
-        team = string
-        data_lake_destination = string
-    }))
+  type = list(object({
+    ingest_bucket = string
+    name = string
+    project = string
+    team = string
+    data_lake_destination = string
+  }))
 }
 
 variable "data_lake_bucket" {
-    type = string
-    description = "The name of the data lake S3 bucket where raw data resides"
+  type = string
+  description = "The name of the data lake S3 bucket where raw data resides"
+}
+
+variable "lambda_error_actions" {
+  type = list
+  description = "The list of SNS topics to send a notification to if the Lambdas throw an error"
 }
 
 locals {

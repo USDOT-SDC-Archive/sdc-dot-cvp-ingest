@@ -8,7 +8,9 @@ resource "aws_lambda_function" "IngestLambda" {
     source_code_hash = base64sha256(timestamp()) # Bust cache of deployment... we want a fresh deployment everytime Terraform runs for now...
     runtime = "python3.7"
     timeout = 900 # apparently some of these files get LARGE and can take a while to copy over
-    tags = merge({Name = var.data_providers[count.index]["ingest_bucket"]}, local.team_global_tags)
+    tags = merge({Name = var.data_providers[count.index]["ingest_bucket"],
+                  Team = var.data_providers[count.index]["team"],
+                  Project = var.data_providers[count.index]["project"]}, local.team_global_tags)
     environment {
         variables = {
             TARGET_DATA_BUCKET = var.data_lake_bucket
@@ -21,10 +23,29 @@ resource "aws_lambda_function" "IngestLambda" {
     }
 }
 
+resource "aws_cloudwatch_metric_alarm" "IngestLambdaErrors" {
+  count = length(var.data_providers)
+  alarm_name = "${var.environment}-dot-sdc-${var.data_providers[count.index]["name"]}-manual-ingest-errors"
+  alarm_description = "Monitor errors for the ${var.environment}-dot-sdc-${var.data_providers[count.index]["name"]}-manual-ingest function"
+
+  namespace = "AWS/Lambda"
+  dimensions = {
+    FunctionName = "${var.environment}-dot-sdc-${var.data_providers[count.index]["name"]}-manual-ingest"
+  }
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  threshold = "0"
+  evaluation_periods = "1"
+  metric_name = "Errors"
+  period = "60"
+  statistic = "Average"
+  
+  alarm_actions = var.lambda_error_actions
+}
+
 resource "aws_iam_role" "IngestLambdaRole" {
-    count = length(var.data_providers)
-    name = "${var.environment}-dot-sdc-${var.data_providers[count.index]["name"]}-manual-ingest"
-    assume_role_policy = <<EOF
+  count = length(var.data_providers)
+  name = "${var.environment}-dot-sdc-${var.data_providers[count.index]["name"]}-manual-ingest"
+  assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -80,7 +101,6 @@ resource "aws_iam_policy" "LambdaPermissions" {
     {
       "Effect": "Allow",
       "Action": [
-        "s3:PutObject",
         "s3:GetObject",
         "s3:ListBucket",
         "s3:DeleteObject"
