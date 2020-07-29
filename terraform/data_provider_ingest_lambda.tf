@@ -1,11 +1,16 @@
+data "aws_s3_bucket_object" "lambda_zip" {
+  bucket = var.lambda_binary_bucket
+  key = "sdc-dot-cvp-ingest/data_processor.zip"
+}
+
 resource "aws_lambda_function" "IngestLambda" {
     count = length(var.data_providers)
-    s3_bucket = var.lambda_binary_bucket
-    s3_key = "sdc-dot-cvp-ingest/data_processor.zip"
+    s3_bucket = data.aws_s3_bucket_object.lambda_zip.bucket
+    s3_key = data.aws_s3_bucket_object.lambda_zip.key
+    s3_object_version = data.aws_s3_bucket_object.lambda_zip.version_id
     function_name = "${var.environment}-dot-sdc-${var.data_providers[count.index]["name"]}-manual-ingest"
     role = aws_iam_role.IngestLambdaRole[count.index].arn
     handler = "data_processor.lambda_handler"
-    source_code_hash = base64sha256(timestamp()) # Bust cache of deployment... we want a fresh deployment everytime Terraform runs for now...
     runtime = "python3.7"
     timeout = 900 # apparently some of these files get LARGE and can take a while to copy over
     tags = merge({Name = var.data_providers[count.index]["ingest_bucket"],

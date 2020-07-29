@@ -34,4 +34,4 @@ data_providers = [{
 }]
 data_lake_bucket = "dev-dot-sdc-raw-submissions-911061262852-us-east-1"
 lambda_binary_bucket = "dev-dot-sdc-regional-lambda-bucket-911061262852-us-east-1"
-lambda_error_actions = ["arn:aws:sns:us-east-1:911061262852:dev-email-aaron-test-topic"]
+lambda_error_actions = [] # insert SNS topic ARN here to send emails for errors
