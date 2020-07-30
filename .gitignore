@@ -8,3 +8,6 @@ htmlcov/**
 venv/**
 .coverage
 html_coverage_reports/**
+*.zip
+.terraform
+terraform.tfstate*
