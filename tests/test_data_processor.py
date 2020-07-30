@@ -29,6 +29,9 @@ event_data = {
         ]
 }
 
+os.environ["AWS_ACCESS_KEY_ID"] = "test"
+os.environ["AWS_SECRET_ACCESS_KEY"] = "test"
+
 s3 = boto3.client('s3', region_name="us-east-1")
 
 @pytest.fixture(autouse=True)
