@@ -35,8 +35,6 @@ def lambda_handler(event, context):
     target_data_folder_path = bucket_destination_mapping()[source_bucket]
     now = datetime.now()
     target_key = os.path.join(target_data_folder_path, now.strftime('%Y'), now.strftime('%m'), now.strftime('%d'), source_key)
-    if 'atri' in target_key:
-        1/0
 
     logging.info(f'target_bucket: {target_bucket}')
     logging.info(f'target_key: {target_key}')
