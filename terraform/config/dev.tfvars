@@ -6,7 +6,7 @@ subnet_ids = ["subnet-1d181f40", "subnet-b29f87d6"]
 # tianna can you check these tags?
 data_providers = [{
     ingest_bucket = "dev-dot-sdc-cvp-nyc-ingest"
-    project = "cvp"
+    project = "CVP"
     team = "cvp-nyc"
     name = "cvpep-nyc"
     data_lake_destination = "cv/nyc/"
@@ -14,20 +14,20 @@ data_providers = [{
 {
     ingest_bucket = "dev-dot-sdc-cvp-thea-ingest"
     team = "cvp-thea"
-    project = "cvp"
+    project = "CVP"
     name = "cvpep-thea"
     data_lake_destination = "cv/thea/"
 },
 {
     ingest_bucket = "dev-dot-sdc-cvp-wydot-ingest"
-    project = "cvp"
+    project = "CVP"
     team = "cvp-wydot"
     name = "cvpep-wydot"
     data_lake_destination = "cv/wydot/"
 },
 {
     ingest_bucket = "dev-dot-sdc-btsffa-atri-ingest"
-    project = "fmi"
+    project = "FMI"
     team = "fmi-atri"
     name = "btsffa-atri"
     data_lake_destination = "btsffa/atri/"
