@@ -1,6 +1,7 @@
 provider "aws" {
   version = "~> 2.0"
   profile = "sdc"
+  region = "us-east-1"
 }
 
 terraform {
