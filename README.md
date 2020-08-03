@@ -61,11 +61,8 @@ The SDC platform supports two major roles:
 <a name="release-notes"/>
 
 ## I. Release Notes
-
-
-<!---                           -->
-<!---     Usage Example         -->
-<!---                           -->
+**August 7, 2020. SDC sdc-cvp-ingest Release 1.0**
+* Import/reconcile manually created resources with Terraform
 
 <a name="usage-example"/>
 
