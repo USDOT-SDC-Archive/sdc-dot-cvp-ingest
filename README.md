@@ -63,6 +63,8 @@ The SDC platform supports two major roles:
 ## I. Release Notes
 **August 7, 2020. SDC sdc-cvp-ingest Release 1.0**
 * Import/reconcile manually created resources with Terraform
+* Configuration for Lambdas are uniform
+* Update tags to match proper team
 
 <a name="usage-example"/>
 
