@@ -37,7 +37,7 @@ resource "aws_cloudwatch_metric_alarm" "IngestLambdaErrors" {
   dimensions = {
     FunctionName = "${var.environment}-dot-sdc-${var.data_providers[count.index]["name"]}-manual-ingest"
   }
-  comparison_operator = "GreaterThanOrEqualToThreshold"
+  comparison_operator = "GreaterThanThreshold"
   threshold = "0"
   evaluation_periods = "1"
   metric_name = "Errors"
@@ -45,6 +45,9 @@ resource "aws_cloudwatch_metric_alarm" "IngestLambdaErrors" {
   statistic = "Average"
   
   alarm_actions = var.lambda_error_actions
+  tags = merge({Name = var.data_providers[count.index]["ingest_bucket"],
+              Team = var.data_providers[count.index]["team"],
+              Project = var.data_providers[count.index]["project"]}, local.team_global_tags)
 }
 
 resource "aws_iam_role" "IngestLambdaRole" {

@@ -55,7 +55,8 @@ def test_lambda_handler_uploads_file_to_destination_bucket():
     data_processor.lambda_handler(event_data, None)
     
     now = datetime.now()
-    s3.head_object(Bucket=DESTINATION_BUCKET_NAME, Key=f'{TARGET_KEY}{now.strftime("%Y")}/{now.strftime("%m")}/{now.strftime("%d")}/{SOURCE_KEY}')
+
+    s3.head_object(Bucket=DESTINATION_BUCKET_NAME, Key=f'{TARGET_KEY}bsm/{now.strftime("%Y")}/{now.strftime("%m")}/{now.strftime("%d")}/file.csv')
 
 
 def test_create_upload_chunks_divides_files_evenly():
