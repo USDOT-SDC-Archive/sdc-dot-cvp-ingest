@@ -33,8 +33,10 @@ def lambda_handler(event, context):
 
     target_bucket = os.environ['TARGET_DATA_BUCKET']
     target_data_folder_path = bucket_destination_mapping()[source_bucket]
+    source_key_path = os.path.dirname(source_key)
+    source_key_filename = os.path.basename(source_key)
     now = datetime.now()
-    target_key = os.path.join(target_data_folder_path, now.strftime('%Y'), now.strftime('%m'), now.strftime('%d'), source_key)
+    target_key = os.path.join(target_data_folder_path, source_key_path, now.strftime('%Y'), now.strftime('%m'), now.strftime('%d'), source_key_filename)
 
     logging.info(f'target_bucket: {target_bucket}')
     logging.info(f'target_key: {target_key}')
