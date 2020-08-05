@@ -3,7 +3,6 @@ aws_region = "us-east-1"
 account_number = "911061262852"
 vpc_id = "vpc-40a23b3b"
 subnet_ids = ["subnet-1d181f40", "subnet-b29f87d6"]
-# tianna can you check these tags?
 data_providers = [{
     ingest_bucket = "prod-dot-sdc-cvp-nyc-ingest"
     project = "CVP"
