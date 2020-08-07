@@ -61,6 +61,11 @@ The SDC platform supports two major roles:
 <a name="release-notes"/>
 
 ## I. Release Notes
+**August 13, 2020. SDC sdc-cvp-ingest Release 1.0**
+* Import/reconcile additional manually created resources with Terraform
+* Configuration for Kinesis Firehose Delivery Streams are uniform
+* Update tags and resource descriptions to match naming conventions
+
 **August 7, 2020. SDC sdc-cvp-ingest Release 1.0**
 * Import/reconcile manually created resources with Terraform
 * Configuration for Lambdas are uniform
