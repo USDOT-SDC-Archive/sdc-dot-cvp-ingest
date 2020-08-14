@@ -40,9 +40,24 @@ variable "data_lake_bucket" {
   description = "The name of the data lake S3 bucket where raw data resides"
 }
 
+variable "data_lake_bucket_arn" {
+  type = string
+  description = "The arn of the data lake S3 bucket where raw data resides"
+}
+
+variable "data_lake_kms_key_arn" {
+  type = string
+  description = "The arn of the data lake S3 KMS Key for data-at-rest encryption"
+}
+
 variable "lambda_error_actions" {
   type = list
   description = "The list of SNS topics to send a notification to if the Lambdas throw an error"
+}
+
+variable "cloudwatch_sns_topics" {
+  type = list
+  description = "The SNS topics to send notifications to for CloudWatch alarms"
 }
 
 locals {
