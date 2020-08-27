@@ -336,7 +336,6 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_alert" {
         Project = var.data_providers[2]["project"],
         Team = var.data_providers[2]["team"]
     }
-    version_id     = "2"
 
     extended_s3_configuration {
         bucket_arn         = var.data_lake_bucket_arn
@@ -372,7 +371,6 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_bsm" {
         Project = var.data_providers[2]["project"],
         Team = var.data_providers[2]["team"]
     }
-    version_id     = "8"
 
     extended_s3_configuration {
         bucket_arn         = var.data_lake_bucket_arn
@@ -408,7 +406,6 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_tim" {
         Project = var.data_providers[2]["project"],
         Team = var.data_providers[2]["team"]
     }
-    version_id     = "8"
 
     extended_s3_configuration {
         bucket_arn         = var.data_lake_bucket_arn
