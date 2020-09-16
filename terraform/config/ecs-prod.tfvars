@@ -29,4 +29,4 @@ data_lake_bucket_arn = "arn:aws:s3:::prod-dot-sdc-raw-submissions-004118380849-u
 data_lake_kms_key_arn = "arn:aws:kms:us-east-1:004118380849:key/a5480c3b-e32b-44f4-b9c4-4804b2ff331e"
 lambda_binary_bucket = "prod-lambda-bucket-004118380849"
 lambda_error_actions = ["arn:aws:sns:us-east-1:004118380849:prod-hadoop-ingestion-errors"] # insert SNS topic ARN here to send emails for errors
-cloudwatch_sns_topics = ["arn:aws:sns:us-east-1:004118380849:prod-hadoop-ingestion-errors"]
+cloudwatch_sns_topics = []# ["arn:aws:sns:us-east-1:004118380849:prod-hadoop-ingestion-errors"]
