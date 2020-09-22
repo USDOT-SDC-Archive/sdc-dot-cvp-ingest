@@ -23,7 +23,7 @@ resource "aws_lambda_function" "FirehoseReplicatorLambda" {
   s3_object_version = data.aws_s3_bucket_object.replicator_zip.version_id
   function_name     = "${var.environment}-dot-cvp-ingest-firehose-replicator"
   role              = aws_iam_role.firehose_replicator_role.arn
-  handler           = "lambda_function.lambda_handler"
+  handler           = "firehose_replicator.lambda_handler"
   runtime           = "python3.7"
   timeout           = 60
   memory_size       = 128
