@@ -1,21 +1,23 @@
 import base64
 import boto3
+import os
 
 def lambda_handler(event, context):
     output = []
 
     for record in event['records']:
-        print(record['recordId'])
-        payload = base64.b64decode(record['data'])
+        print(f"Processing record {record['recordId']} ...")
+        file_content = base64.b64decode(record['data'])
 
         # TODO: push to ecs
-        # s3_client = boto3.client('s3')
-        # target_bucket = 'dev-dot-sdc-raw-submissions-505135622787-us-east-1'
-        # file_content = b'hello'
+        s3_client = boto3.client('s3')
+        target_bucket = os.environ.get('ECS_BUCKET_NAME')
+        # file_content = payload
         # file_key = 'hello_from_quarantine.txt'
-        # # target bucket must allow PUT from source ARN:
-        # # arn:aws:lambda:us-east-1:911061262852:function:dev-put-s3-object-into-ecs
+        # target bucket must allow PUT from source ARN:
+        # arn:aws:lambda:us-east-1:911061262852:function:dev-put-s3-object-into-ecs
         
+        # TODO: Figure out how we get the file key?
         # response = s3_client.put_object(
         #     Body=file_content, 
         #     Bucket=target_bucket,
@@ -28,7 +30,7 @@ def lambda_handler(event, context):
         output_record = {
             'recordId': record['recordId'],
             'result': 'Ok',
-            'data': base64.b64encode(payload)
+            'data': base64.b64encode(file_content)
         }
         output.append(output_record)
 

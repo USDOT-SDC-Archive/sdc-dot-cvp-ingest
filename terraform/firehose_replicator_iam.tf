@@ -86,7 +86,7 @@ resource "aws_iam_policy" "vpc_access_policy" {
 # Allow CW put/get
 resource "aws_iam_policy" "lambda_cloudwatch_policy" {
   name        = "${var.environment}-cvp-ingest-lambda-cw-policy"
-  description = "Allow put/get for CW metrics."
+  description = "Permissions for CW metrics and logs."
 
   policy = <<-EOF
   {
@@ -97,7 +97,10 @@ resource "aws_iam_policy" "lambda_cloudwatch_policy" {
             "Effect": "Allow",
             "Action": [
                 "cloudwatch:PutMetricData",
-                "cloudwatch:GetMetricStatistics"
+                "cloudwatch:GetMetricStatistics",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
             ],
             "Resource": "*"
         }
