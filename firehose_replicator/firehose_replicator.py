@@ -30,7 +30,7 @@ def lambda_handler(event, context):
         output_record = {
             'recordId': record['recordId'],
             'result': 'Ok',
-            'data': base64.b64encode(file_content).decode("utf-8")
+            'data': record['data']
         }
         output.append(output_record)
 
