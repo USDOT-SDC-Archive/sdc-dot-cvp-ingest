@@ -40,11 +40,6 @@ variable "data_lake_bucket" {
   description = "The name of the data lake S3 bucket where raw data resides"
 }
 
-variable "data_lake_bucket_arn" {
-  type = string
-  description = "The arn of the data lake S3 bucket where raw data resides"
-}
-
 variable "data_lake_kms_key_arn" {
   type = string
   description = "The arn of the data lake S3 KMS Key for data-at-rest encryption"
@@ -60,17 +55,28 @@ variable "cloudwatch_sns_topics" {
   description = "The SNS topics to send notifications to for CloudWatch alarms"
 }
 
-locals {
-    team_global_tags = {
-        SourceRepo = "sdc-dot-cvp-ingest"
-        Environment = var.environment
-    }
+variable "ecs_account_number" {
+  type = string
+  description = "The account number for the 'ECS' account within the DOT network"
+  default = ""
+}
+
+variable "is_quarantine_account" {
+  type = bool
+  description = "True if you are running apply from the old non-OT 'quarantine' account"
+  default = false
 }
 
 locals {
-    global_tags = merge(local.team_global_tags, {
-        Project = "SDC-Platform"
-        Team = "sdc-platform"
-        Owner = "SDC support team"
-    })
+  team_global_tags = {
+      SourceRepo = "sdc-dot-cvp-ingest"
+      Environment = var.environment
+  }
+  global_tags = merge(local.team_global_tags, {
+      Project = "SDC-Platform"
+      Team = "sdc-platform"
+      Owner = "SDC support team"
+  })
+  ecs_raw_bucket_arn = "arn:aws:s3:::${var.environment}-dot-sdc-raw-submissions-${var.ecs_account_number}-us-east-1"
+  data_lake_bucket_arn = "arn:aws:s3:::${var.data_lake_bucket}"
 }

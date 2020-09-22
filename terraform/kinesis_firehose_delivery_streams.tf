@@ -37,8 +37,8 @@ resource "aws_iam_policy" "firehose_managed_policy" {
                 "s3:PutObject"
             ],
             "Resource": [
-                "${var.data_lake_bucket_arn}/*",
-                "${var.data_lake_bucket_arn}"
+                "${local.data_lake_bucket_arn}/*",
+                "${local.data_lake_bucket_arn}"
             ]
         }
     ]
@@ -104,8 +104,8 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                 "s3:PutObject"
             ],
             "Resource": [
-                "${var.data_lake_bucket_arn}",
-                "${var.data_lake_bucket_arn}/*",
+                "${local.data_lake_bucket_arn}",
+                "${local.data_lake_bucket_arn}/*",
                 "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%",
                 "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
             ]
@@ -133,7 +133,7 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                     "kms:ViaService": "s3.${var.aws_region}.amazonaws.com"
                 },
                 "StringLike": {
-                    "kms:EncryptionContext:aws:s3:arn": "${var.data_lake_bucket_arn}/cv/wydot/alert/*"
+                    "kms:EncryptionContext:aws:s3:arn": "${local.data_lake_bucket_arn}/cv/wydot/alert/*"
                 }
             }
         },
@@ -244,8 +244,8 @@ resource "aws_iam_role_policy" "firehose_wydot_bsm_inline_policy_1" {
                 "s3:PutObject"
             ],
             "Resource": [
-                "${var.data_lake_bucket_arn}/*",
-                "${var.data_lake_bucket_arn}"
+                "${local.data_lake_bucket_arn}/*",
+                "${local.data_lake_bucket_arn}"
             ]
         }
     ]
@@ -318,8 +318,8 @@ resource "aws_iam_role_policy" "firehose_wydot_tim_inline_policy_1" {
                 "s3:PutObject"
             ],
             "Resource": [
-                "${var.data_lake_bucket_arn}/*",
-                "${var.data_lake_bucket_arn}"
+                "${local.data_lake_bucket_arn}/*",
+                "${local.data_lake_bucket_arn}"
             ]
         }
     ]
@@ -338,7 +338,7 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_alert" {
     }
 
     extended_s3_configuration {
-        bucket_arn         = var.data_lake_bucket_arn
+        bucket_arn         = local.data_lake_bucket_arn
         buffer_interval    = 60
         buffer_size        = 5
         compression_format = "GZIP"
@@ -373,7 +373,7 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_bsm" {
     }
 
     extended_s3_configuration {
-        bucket_arn         = var.data_lake_bucket_arn
+        bucket_arn         = local.data_lake_bucket_arn
         buffer_interval    = 60
         buffer_size        = 5
         compression_format = "GZIP"
@@ -408,7 +408,7 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_tim" {
     }
 
     extended_s3_configuration {
-        bucket_arn         = var.data_lake_bucket_arn
+        bucket_arn         = local.data_lake_bucket_arn
         buffer_interval    = 60
         buffer_size        = 5
         compression_format = "GZIP"
