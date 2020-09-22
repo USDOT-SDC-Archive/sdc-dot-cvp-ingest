@@ -1,5 +1,5 @@
 resource "aws_iam_role" "firehose_replicator_role" {
-  name        = "${var.deploy_env}-firehose-replicator-role"
+  name        = "${var.environment}-firehose-replicator-role"
   description = "Allows Lambda functions to push data to ECS s3 raw submissions."
 
   assume_role_policy = <<-EOF
@@ -19,7 +19,7 @@ resource "aws_iam_role" "firehose_replicator_role" {
 }
 
 resource "aws_iam_policy" "put_ecs_raw_submissions_policy" {
-  name        = "${var.deploy_env}-put-ecs-raw-submissions"
+  name        = "${var.environment}-put-ecs-raw-submissions"
   description = "Allows putting objects in the ECS raw submissions bucket."
 
   policy = <<-EOF
@@ -39,7 +39,7 @@ resource "aws_iam_policy" "put_ecs_raw_submissions_policy" {
 
 # Special policy for lambdas running in VPC. All lambdas will run in VPC.
 resource "aws_iam_policy" "vpc_access_policy" {
-  name        = "${var.deploy_env}-cvp-ingest-lambda-vpc-policy"
+  name        = "${var.environment}-cvp-ingest-lambda-vpc-policy"
   description = "Policy to allow lambdas to run in a VPC."
 
   policy = <<-EOF
@@ -85,7 +85,7 @@ resource "aws_iam_policy" "vpc_access_policy" {
 
 # Allow CW put/get
 resource "aws_iam_policy" "lambda_cloudwatch_policy" {
-  name        = "${var.deploy_env}-cvp-ingest-lambda-cw-policy"
+  name        = "${var.environment}-cvp-ingest-lambda-cw-policy"
   description = "Allow put/get for CW metrics."
 
   policy = <<-EOF
