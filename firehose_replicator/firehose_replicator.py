@@ -4,6 +4,7 @@ import json
 import os
 from datetime import datetime
 import uuid
+import gzip
 
 def lambda_handler(event, context):
     output = []
@@ -37,9 +38,11 @@ def lambda_handler(event, context):
     print(f"About push {full_key} into {target_bucket}...")
     
     # Dump all items as JSON, but strip collection brackets to match firehose
+    # TODO: somehow gzip the bytes...?
     firehose_body = bytes(json.dumps(s3_output).strip('[]'), 'utf-8')
+    gzipped_body = gzip.compress(firehose_body)
     response = s3_client.put_object(
-        Body=firehose_body, 
+        Body=gzipped_body, 
         Bucket=target_bucket,
         Key=full_key,
         ServerSideEncryption='AES256')
