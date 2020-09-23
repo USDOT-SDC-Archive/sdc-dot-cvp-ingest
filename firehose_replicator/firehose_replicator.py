@@ -28,7 +28,7 @@ def lambda_handler(event, context):
         # key_prefix = os.environ.get('KEY_PREFIX')
         key_prefix = 'cv/wydot/alert'
         ymd_prefix = f"{dt.year}/{dt.month}/{dt.day}"
-        key_name = f"{stream_name}-{dt.year}-{dt.month}-{dt.day}-{dt.hour}-{dt.minute}-{dt.second}-{uuid.uuid1()}.gz"
+        key_name = f"{stream_name}-{dt.year}-{dt.month:02}-{dt.day:02}-{dt.hour:02}-{dt.minute:02}-{dt.second:02}-{uuid.uuid1()}.gz"
         full_key = f"{key_prefix}/{ymd_prefix}/{key_name}"
 
         # TODO: push to ecs
