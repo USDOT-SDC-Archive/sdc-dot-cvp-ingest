@@ -45,14 +45,14 @@ def lambda_handler(event, context):
         # arn:aws:lambda:us-east-1:911061262852:function:dev-put-s3-object-into-ecs
         
         # TODO: Figure out how we get the file key?
-        # response = s3_client.put_object(
-        #     Body=file_content, 
-        #     Bucket=target_bucket,
-        #     Key=file_key)
+        response = s3_client.put_object(
+            Body=file_content, 
+            Bucket=target_bucket,
+            Key=full_key)
         
-        # print(f"Uploaded object with ETag {response['ETag']}")
+        print(f"Uploaded object {full_key} with ETag {response['ETag']}")
 
-        # TOOD
+        # TODO
 
         output_record = {
             'recordId': record['recordId'],
