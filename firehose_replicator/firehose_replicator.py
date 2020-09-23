@@ -36,8 +36,10 @@ def lambda_handler(event, context):
     s3_client = boto3.client('s3')
     print(f"About push {full_key} into {target_bucket}...")
     
+    # Dump all items as JSON, but strip collection brackets to match firehose
+    firehose_body = bytes(json.dumps(s3_output).strip('[]'), 'utf-8')
     response = s3_client.put_object(
-        Body=bytes(json.dumps(s3_output)), 
+        Body=firehose_body, 
         Bucket=target_bucket,
         Key=full_key,
         ServerSideEncryption='AES256')
