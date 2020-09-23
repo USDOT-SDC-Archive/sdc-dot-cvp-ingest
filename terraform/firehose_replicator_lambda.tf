@@ -30,7 +30,7 @@ resource "aws_lambda_function" "FirehoseReplicatorLambda" {
   tags              = local.global_tags
   environment {
     variables = {
-      ECS_BUCKET_NAME  = var.data_lake_bucket
+      ECS_BUCKET_NAME  = local.ecs_raw_bucket_name
     }
   }
 

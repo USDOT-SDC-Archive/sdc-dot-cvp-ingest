@@ -8,9 +8,10 @@ def lambda_handler(event, context):
     output = []
 
     # TODO: split out the ARN part
-    stream_name = event['deliveryStreamArn']
-    print(f"Context is {context}")
-    print(f"Full event is {event}")
+    # arn:aws:firehose:us-east-1:911061262852:deliverystream/dev-dot-sdc-cvpep-wydot-alert
+    stream_name = event['deliveryStreamArn'].split('/')[1]
+    # print(f"Context is {context}")
+    # print(f"Full event is {event}")
 
     for record in event['records']:
         print(f"Processing record {record['recordId']} ...")
@@ -26,7 +27,7 @@ def lambda_handler(event, context):
         # e.g. cv/wydot/alert/
         # key_prefix = os.environ.get('KEY_PREFIX')
         key_prefix = 'cv/wydot/alert'
-        ymd_prefix = f"{dt.year}/{dt.month}/{dt.day}/"
+        ymd_prefix = f"{dt.year}/{dt.month}/{dt.day}"
         key_name = f"{stream_name}-{dt.year}-{dt.month}-{dt.day}-{dt.hour}-{dt.minute}-{dt.second}-{uuid.uuid1()}.gz"
         full_key = f"{key_prefix}/{ymd_prefix}/{key_name}"
 
@@ -44,7 +45,8 @@ def lambda_handler(event, context):
         # target bucket must allow PUT from source ARN:
         # arn:aws:lambda:us-east-1:911061262852:function:dev-put-s3-object-into-ecs
         
-        # TODO: Figure out how we get the file key?
+        print(f"About to put {full_key} into {target_bucket} with content {file_content}...")
+        
         response = s3_client.put_object(
             Body=file_content, 
             Bucket=target_bucket,

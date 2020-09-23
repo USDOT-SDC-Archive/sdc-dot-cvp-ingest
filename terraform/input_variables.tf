@@ -77,6 +77,7 @@ locals {
       Team = "sdc-platform"
       Owner = "SDC support team"
   })
-  ecs_raw_bucket_arn = "arn:aws:s3:::${var.environment}-dot-sdc-raw-submissions-${var.ecs_account_number}-us-east-1"
+  ecs_raw_bucket_name = "${var.environment}-dot-sdc-raw-submissions-${var.ecs_account_number}-us-east-1"
+  ecs_raw_bucket_arn = "arn:aws:s3:::${local.ecs_raw_bucket_name}"
   data_lake_bucket_arn = "arn:aws:s3:::${var.data_lake_bucket}"
 }
