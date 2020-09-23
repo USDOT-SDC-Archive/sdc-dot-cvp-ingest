@@ -50,7 +50,8 @@ def lambda_handler(event, context):
         response = s3_client.put_object(
             Body=file_content, 
             Bucket=target_bucket,
-            Key=full_key)
+            Key=full_key,
+            ServerSideEncryption='AES256')
         
         print(f"Uploaded object {full_key} with ETag {response['ETag']}")
 
