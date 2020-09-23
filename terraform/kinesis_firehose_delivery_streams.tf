@@ -32,7 +32,7 @@ resource "aws_iam_policy" "firehose_managed_policy" {
                 "lambda:InvokeFunction",
                 "lambda:GetFunctionConfiguration"
             ],
-            "Resource": "${aws_lambda_function.FirehoseReplicatorLambda[0].arn}:$LATEST"
+            "Resource": "${aws_lambda_function.FirehoseReplicatorAlertsLambda[0].arn}:$LATEST"
         },
         {
             "Sid": "Stmt4",
@@ -368,10 +368,9 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_alert" {
             processors {
                 type = "Lambda"
 
-                # TODO: 
                 parameters {
                     parameter_name  = "LambdaArn"
-                    parameter_value = "${aws_lambda_function.FirehoseReplicatorLambda[0].arn}:$LATEST"
+                    parameter_value = "${aws_lambda_function.FirehoseReplicatorAlertsLambda[0].arn}:$LATEST"
                 }
             }
         }
