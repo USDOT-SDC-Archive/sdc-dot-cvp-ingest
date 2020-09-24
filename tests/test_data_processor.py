@@ -32,34 +32,32 @@ event_data = {
 os.environ["AWS_ACCESS_KEY_ID"] = "test"
 os.environ["AWS_SECRET_ACCESS_KEY"] = "test"
 
-s3 = boto3.client('s3', region_name="us-east-1")
 
-@pytest.fixture(autouse=True)
-def run_around_tests(mocker):
-    mocks3 = mock_s3()
-    mocks3.start()
+def setup_buckets():
     os.environ['TARGET_DATA_BUCKET'] = 'random_target_bucket'
     os.environ['BUCKET_PATH_MAPPING'] = json.dumps({BUCKET_NAME: TARGET_KEY})
+
+    s3 = boto3.client('s3', region_name="us-east-1")
     s3.create_bucket(Bucket=BUCKET_NAME)
     s3.put_object(Bucket=BUCKET_NAME, Body='body', Key=SOURCE_KEY)
     s3.create_bucket(Bucket=DESTINATION_BUCKET_NAME)
 
-    yield
-
-    del os.environ['TARGET_DATA_BUCKET']
-    del os.environ['BUCKET_PATH_MAPPING']
-    mocks3.stop()
-
-
+@mock_s3
 def test_lambda_handler_uploads_file_to_destination_bucket():
+    setup_buckets()
+    s3 = boto3.client('s3', region_name="us-east-1")
+
     data_processor.lambda_handler(event_data, None)
     
     now = datetime.now()
 
     s3.head_object(Bucket=DESTINATION_BUCKET_NAME, Key=f'{TARGET_KEY}bsm/{now.strftime("%Y")}/{now.strftime("%m")}/{now.strftime("%d")}/file.csv')
 
-
+@mock_s3
 def test_create_upload_chunks_divides_files_evenly():
+    setup_buckets()
+    s3 = boto3.client('s3', region_name="us-east-1")
+
     test_cases = [{'file_size': 10, 'chunk_size': 3, 'expected': ['bytes=0-2', 'bytes=3-5', 'bytes=6-8', 'bytes=9-9']},
                   {'file_size': 10, 'chunk_size': 10, 'expected': ['bytes=0-9']},
                   {'file_size': 7, 'chunk_size': 10, 'expected': ['bytes=0-6'] }]
