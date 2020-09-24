@@ -29,7 +29,11 @@ resource "aws_iam_policy" "put_ecs_raw_submissions_policy" {
         {
             "Sid": "St1",
             "Effect": "Allow",
-            "Action": "s3:PutObject",
+            "Action": [
+              "s3:PutObject",
+              "s3:PutObjectAcl",
+              "s3:PutObjectVersionAcl"
+            ],
             "Resource": "${local.ecs_raw_bucket_arn}/*"
         }
     ]
