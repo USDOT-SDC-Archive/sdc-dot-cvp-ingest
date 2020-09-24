@@ -32,13 +32,14 @@ def lambda_handler(event, context):
             'data': record['data']
         }
         output.append(output_record)
-        s3_output.append(record['data'])
+        s3_output.append(file_content)
 
     s3_client = boto3.client('s3')
     print(f"About push {full_key} into {target_bucket}...")
     
     # Dump all items as JSON, but strip collection brackets to match firehose
     # TODO: verify gzip
+    print(f"Sending payload {json.dumps(s3_output).strip('[]')}")
     firehose_body = bytes(json.dumps(s3_output).strip('[]'), 'utf-8')
     gzipped_body = gzip.compress(firehose_body)
     response = s3_client.put_object(
