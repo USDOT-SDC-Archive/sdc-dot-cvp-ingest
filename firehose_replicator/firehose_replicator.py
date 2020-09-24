@@ -14,8 +14,6 @@ def lambda_handler(event, context):
     key_prefix = os.environ.get('ECS_OBJECT_PREFIX')
     full_key = "replicator_empty_key"
 
-    # TODO: Get timestamp (key) from last record
-    # TODO: Bundle all records in single object akin to firehose
     for record in event['records']:
         print(f"Processing record {record['recordId']} ...")
         file_content = base64.b64decode(record['data']).decode('utf-8')
@@ -37,15 +35,13 @@ def lambda_handler(event, context):
     s3_client = boto3.client('s3')
     print(f"About push {full_key} into {target_bucket}...")
     
-    # concatenate stuff
+    # Concatenate all records, turn into bytes, and compress
     s3_output = ''.join(records_for_s3)
-
-    # TODO: verify gzip
-    print(f"Sending payload {s3_output}")
     firehose_body = bytes(s3_output, 'utf-8')
     gzipped_body = gzip.compress(firehose_body)
+
     response = s3_client.put_object(
-        Body=firehose_body, 
+        Body=gzipped_body, 
         Bucket=target_bucket,
         Key=full_key,
         ServerSideEncryption='AES256',
