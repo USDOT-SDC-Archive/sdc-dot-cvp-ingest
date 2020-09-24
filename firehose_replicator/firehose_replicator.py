@@ -8,7 +8,7 @@ import gzip
 
 def lambda_handler(event, context):
     output = []
-    s3_output = []
+    records_for_s3 = []
     stream_name = event['deliveryStreamArn'].split('/')[1]
     target_bucket = os.environ.get('ECS_BUCKET_NAME')
     key_prefix = os.environ.get('ECS_OBJECT_PREFIX')
@@ -18,7 +18,7 @@ def lambda_handler(event, context):
     # TODO: Bundle all records in single object akin to firehose
     for record in event['records']:
         print(f"Processing record {record['recordId']} ...")
-        file_content = base64.b64decode(record['data'])
+        file_content = base64.b64decode(record['data']).decode('utf-8')
         timestamp_ns = record['approximateArrivalTimestamp']
         timestamp_s = timestamp_ns / 1000
         dt = datetime.fromtimestamp(timestamp_s)
@@ -32,15 +32,17 @@ def lambda_handler(event, context):
             'data': record['data']
         }
         output.append(output_record)
-        s3_output.append(file_content)
+        records_for_s3.append(file_content)
 
     s3_client = boto3.client('s3')
     print(f"About push {full_key} into {target_bucket}...")
     
-    # Dump all items as JSON, but strip collection brackets to match firehose
+    # concatenate stuff
+    s3_output = ''.join(records_for_s3)
+
     # TODO: verify gzip
-    print(f"Sending payload {json.dumps(s3_output).strip('[]')}")
-    firehose_body = bytes(json.dumps(s3_output).strip('[]'), 'utf-8')
+    print(f"Sending payload {s3_output}")
+    firehose_body = bytes(s3_output, 'utf-8')
     gzipped_body = gzip.compress(firehose_body)
     response = s3_client.put_object(
         Body=firehose_body, 
