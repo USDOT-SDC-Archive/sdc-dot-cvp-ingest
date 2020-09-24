@@ -38,14 +38,15 @@ def lambda_handler(event, context):
     print(f"About push {full_key} into {target_bucket}...")
     
     # Dump all items as JSON, but strip collection brackets to match firehose
-    # TODO: somehow gzip the bytes...?
+    # TODO: verify gzip
     firehose_body = bytes(json.dumps(s3_output).strip('[]'), 'utf-8')
     gzipped_body = gzip.compress(firehose_body)
     response = s3_client.put_object(
-        Body=gzipped_body, 
+        Body=firehose_body, 
         Bucket=target_bucket,
         Key=full_key,
-        ServerSideEncryption='AES256')
+        ServerSideEncryption='AES256',
+        ACL='bucket-owner-full-control')
     
     print(f"Uploaded {full_key} with ETag {response['ETag']}")
     print('Successfully processed {} records.'.format(len(event['records'])))
