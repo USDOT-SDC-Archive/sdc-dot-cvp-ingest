@@ -3,10 +3,9 @@ branch = True
 include=
     *.py
 omit=
-    */tests/*
+    test*.py
     */__init__.py
     */python*
-    */tests/*
 
 [report]
 exclude_lines=
