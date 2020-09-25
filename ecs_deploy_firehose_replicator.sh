@@ -1,6 +1,13 @@
 if [[ -z $1 ]]; then
-  echo "You must provide an environment parameter ('dev' or 'prod)"
+  echo "You must provide an environment parameter ('dev' or 'prod')"
   exit 1
+fi
+
+ACCT_NUM='505135622787'
+
+if [ $1 == 'prod' ]
+then
+   ACCT_NUM='004118380849'
 fi
 
 ZIP_NAME="firehose_replicator.zip"
@@ -31,7 +38,7 @@ popd
 
 # Push zipped files up to S3
 echo "Copying to s3..."
-aws s3 cp --profile sdc $ZIP_NAME s3://$1-dot-sdc-regional-lambda-bucket-911061262852-us-east-1/sdc-dot-cvp-ingest/$ZIP_NAME --region us-east-1
+aws s3 cp $ZIP_NAME s3://$1-lambda-bucket-$ACCT_NUM/sdc-dot-cvp-ingest/$ZIP_NAME --region us-east-1
 
 echo ""
 echo "Done!"
