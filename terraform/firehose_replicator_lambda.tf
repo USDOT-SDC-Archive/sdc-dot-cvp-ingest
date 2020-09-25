@@ -4,12 +4,10 @@ data "aws_s3_bucket_object" "replicator_zip" {
   key    = "sdc-dot-cvp-ingest/firehose_replicator.zip"
 }
 
-# This lambda is intended to replicate 1-way, so do not put this in the ECS cloud
 # These lambdas are identical except that they take input from different streams,
 # and accordingly drop them into different ECS destinations
 resource "aws_lambda_function" "FirehoseReplicatorAlertsLambda" {
-  count = var.is_quarantine_account ? 1 : 0
-  description       = "Replicates alert files from quarantine firehose into the ECS raw submissions bucket"
+  description       = "Replicates alert files from this account into the mirrored raw submissions bucket"
   s3_bucket         = data.aws_s3_bucket_object.replicator_zip.bucket
   s3_key            = data.aws_s3_bucket_object.replicator_zip.key
   s3_object_version = data.aws_s3_bucket_object.replicator_zip.version_id
@@ -22,7 +20,7 @@ resource "aws_lambda_function" "FirehoseReplicatorAlertsLambda" {
   tags              = local.global_tags
   environment {
     variables = {
-      ECS_BUCKET_NAME  = local.ecs_raw_bucket_name,
+      ECS_BUCKET_NAME  = local.mirror_raw_bucket_name,
       ECS_OBJECT_PREFIX = "cv/wydot/alert"
     }
   }
@@ -34,8 +32,7 @@ resource "aws_lambda_function" "FirehoseReplicatorAlertsLambda" {
 }
 
 resource "aws_lambda_function" "FirehoseReplicatorTIMLambda" {
-  count = var.is_quarantine_account ? 1 : 0
-  description       = "Replicates TIM (Traveller Information Message) files from quarantine firehose into the ECS raw submissions bucket"
+  description       = "Replicates TIM (Traveller Information Message) files from this account into the mirrored raw submissions bucket"
   s3_bucket         = data.aws_s3_bucket_object.replicator_zip.bucket
   s3_key            = data.aws_s3_bucket_object.replicator_zip.key
   s3_object_version = data.aws_s3_bucket_object.replicator_zip.version_id
@@ -48,7 +45,7 @@ resource "aws_lambda_function" "FirehoseReplicatorTIMLambda" {
   tags              = local.global_tags
   environment {
     variables = {
-      ECS_BUCKET_NAME  = local.ecs_raw_bucket_name,
+      ECS_BUCKET_NAME  = local.mirror_raw_bucket_name,
       ECS_OBJECT_PREFIX = "cv/wydot/TIM"
     }
   }
@@ -60,8 +57,7 @@ resource "aws_lambda_function" "FirehoseReplicatorTIMLambda" {
 }
 
 resource "aws_lambda_function" "FirehoseReplicatorBSMLambda" {
-  count = var.is_quarantine_account ? 1 : 0
-  description       = "Replicates BSM (Basic Safety Message) files from quarantine firehose into the ECS raw submissions bucket"
+  description       = "Replicates BSM (Basic Safety Message) files from this account into the mirrored raw submissions bucket"
   s3_bucket         = data.aws_s3_bucket_object.replicator_zip.bucket
   s3_key            = data.aws_s3_bucket_object.replicator_zip.key
   s3_object_version = data.aws_s3_bucket_object.replicator_zip.version_id
@@ -74,7 +70,7 @@ resource "aws_lambda_function" "FirehoseReplicatorBSMLambda" {
   tags              = local.global_tags
   environment {
     variables = {
-      ECS_BUCKET_NAME  = local.ecs_raw_bucket_name,
+      ECS_BUCKET_NAME  = local.mirror_raw_bucket_name,
       ECS_OBJECT_PREFIX = "cv/wydot/BSM"
     }
   }

@@ -32,7 +32,11 @@ resource "aws_iam_policy" "firehose_managed_policy" {
                 "lambda:InvokeFunction",
                 "lambda:GetFunctionConfiguration"
             ],
-            "Resource": "${aws_lambda_function.FirehoseReplicatorAlertsLambda[0].arn}:$LATEST"
+            "Resource": [
+                "${aws_lambda_function.FirehoseReplicatorAlertsLambda.arn}:$LATEST",
+                "${aws_lambda_function.FirehoseReplicatorTIMLambda.arn}:$LATEST",
+                "${aws_lambda_function.FirehoseReplicatorBSMLambda.arn}:$LATEST"
+            ]
         },
         {
             "Sid": "Stmt4",
@@ -126,7 +130,7 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                 "lambda:InvokeFunction",
                 "lambda:GetFunctionConfiguration"
             ],
-            "Resource": "arn:aws:lambda:${var.aws_region}:${var.account_number}:function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%"
+            "Resource": "arn:aws:lambda:${var.aws_region}:${local.current_account_number}:function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%"
         },
         {
             "Effect": "Allow",
@@ -153,7 +157,7 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                 "logs:PutLogEvents"
             ],
             "Resource": [
-                "arn:aws:logs:${var.aws_region}:${var.account_number}:log-group:/aws/kinesisfirehose/${var.environment}-dot-sdc-cvpep-wydot-alert:log-stream:*"
+                "arn:aws:logs:${var.aws_region}:${local.current_account_number}:log-group:/aws/kinesisfirehose/${var.environment}-dot-sdc-cvpep-wydot-alert:log-stream:*"
             ]
         },
         {
@@ -164,7 +168,7 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                 "kinesis:GetShardIterator",
                 "kinesis:GetRecords"
             ],
-            "Resource": "arn:aws:kinesis:${var.aws_region}:${var.account_number}:stream/%FIREHOSE_STREAM_NAME%"
+            "Resource": "arn:aws:kinesis:${var.aws_region}:${local.current_account_number}:stream/%FIREHOSE_STREAM_NAME%"
         },
         {
             "Effect": "Allow",
@@ -179,7 +183,7 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                     "kms:ViaService": "kinesis.%REGION_NAME%.amazonaws.com"
                 },
                 "StringLike": {
-                    "kms:EncryptionContext:aws:kinesis:arn": "arn:aws:kinesis:%REGION_NAME%:${var.account_number}:stream/%FIREHOSE_STREAM_NAME%"
+                    "kms:EncryptionContext:aws:kinesis:arn": "arn:aws:kinesis:%REGION_NAME%:${local.current_account_number}:stream/%FIREHOSE_STREAM_NAME%"
                 }
             }
         }
@@ -370,7 +374,7 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_alert" {
 
                 parameters {
                     parameter_name  = "LambdaArn"
-                    parameter_value = "${aws_lambda_function.FirehoseReplicatorAlertsLambda[0].arn}:$LATEST"
+                    parameter_value = "${aws_lambda_function.FirehoseReplicatorAlertsLambda.arn}:$LATEST"
                 }
             }
         }
@@ -414,7 +418,7 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_bsm" {
 
                 parameters {
                     parameter_name  = "LambdaArn"
-                    parameter_value = "${aws_lambda_function.FirehoseReplicatorBSMLambda[0].arn}:$LATEST"
+                    parameter_value = "${aws_lambda_function.FirehoseReplicatorBSMLambda.arn}:$LATEST"
                 }
             }
         }
@@ -458,7 +462,7 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_tim" {
 
                 parameters {
                     parameter_name  = "LambdaArn"
-                    parameter_value = "${aws_lambda_function.FirehoseReplicatorTIMLambda[0].arn}:$LATEST"
+                    parameter_value = "${aws_lambda_function.FirehoseReplicatorTIMLambda.arn}:$LATEST"
                 }
             }
         }

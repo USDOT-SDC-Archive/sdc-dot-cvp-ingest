@@ -34,7 +34,7 @@ resource "aws_iam_policy" "put_ecs_raw_submissions_policy" {
               "s3:PutObjectAcl",
               "s3:PutObjectVersionAcl"
             ],
-            "Resource": "${local.ecs_raw_bucket_arn}/*"
+            "Resource": "${local.mirror_raw_bucket_arn}/*"
         }
     ]
   }

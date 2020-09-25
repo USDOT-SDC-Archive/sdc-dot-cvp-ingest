@@ -77,7 +77,14 @@ locals {
       Team = "sdc-platform"
       Owner = "SDC support team"
   })
-  ecs_raw_bucket_name = "${var.environment}-dot-sdc-raw-submissions-${var.ecs_account_number}-us-east-1"
-  ecs_raw_bucket_arn = "arn:aws:s3:::${local.ecs_raw_bucket_name}"
   data_lake_bucket_arn = "arn:aws:s3:::${var.data_lake_bucket}"
+
+  # When running in quarantine (QT), current is QT and mirror is ECS.
+  # When running in ECS, current is ECS and mirror is QT
+  current_account_number = var.is_quarantine_account ? var.account_number : var.ecs_account_number
+  mirror_account_number = var.is_quarantine_account ? var.ecs_account_number : var.account_number
+
+  mirror_raw_bucket_name = "${var.environment}-dot-sdc-raw-submissions-${local.mirror_account_number}-us-east-1"
+  mirror_raw_bucket_arn = "arn:aws:s3:::${local.mirror_raw_bucket_name}"
+  
 }
