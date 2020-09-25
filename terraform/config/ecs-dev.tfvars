@@ -31,4 +31,4 @@ data_lake_kms_key_arn = "arn:aws:kms:us-east-1:505135622787:key/a5480c3b-e32b-44
 lambda_binary_bucket = "dev-lambda-bucket-505135622787"
 lambda_error_actions = [] # insert SNS topic ARN here to send emails for errors
 cloudwatch_sns_topics = []
-ecs_account_number    = "505135622787"
+mirror_account_number    = "911061262852"

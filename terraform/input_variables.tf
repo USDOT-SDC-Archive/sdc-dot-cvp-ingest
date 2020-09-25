@@ -8,6 +8,7 @@ variable "aws_region" {
 
 variable "account_number" {
   type = string
+  description = "The account number of the account you are currently running TF within"
 }
 
 variable "lambda_binary_bucket" {
@@ -55,16 +56,9 @@ variable "cloudwatch_sns_topics" {
   description = "The SNS topics to send notifications to for CloudWatch alarms"
 }
 
-variable "ecs_account_number" {
+variable "mirror_account_number" {
   type = string
-  description = "The account number for the 'ECS' account within the DOT network"
-  default = ""
-}
-
-variable "is_quarantine_account" {
-  type = bool
-  description = "True if you are running apply from the old non-OT 'quarantine' account"
-  default = false
+  description = "The mirror account number. If you are in Quarantine (QT), this will be the ECS account number, and vice versa."
 }
 
 locals {
@@ -79,12 +73,6 @@ locals {
   })
   data_lake_bucket_arn = "arn:aws:s3:::${var.data_lake_bucket}"
 
-  # When running in quarantine (QT), current is QT and mirror is ECS.
-  # When running in ECS, current is ECS and mirror is QT
-  current_account_number = var.is_quarantine_account ? var.account_number : var.ecs_account_number
-  mirror_account_number = var.is_quarantine_account ? var.ecs_account_number : var.account_number
-
-  mirror_raw_bucket_name = "${var.environment}-dot-sdc-raw-submissions-${local.mirror_account_number}-us-east-1"
+  mirror_raw_bucket_name = "${var.environment}-dot-sdc-raw-submissions-${var.mirror_account_number}-us-east-1"
   mirror_raw_bucket_arn = "arn:aws:s3:::${local.mirror_raw_bucket_name}"
-  
 }

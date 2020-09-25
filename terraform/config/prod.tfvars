@@ -36,5 +36,4 @@ data_lake_kms_key_arn = "arn:aws:kms:us-east-1:911061262852:key/ad203c13-d93c-49
 lambda_binary_bucket = "prod-dot-sdc-regional-lambda-bucket-911061262852-us-east-1"
 lambda_error_actions = ["arn:aws:sns:us-east-1:911061262852:production-sdc-dot-hadoop-ingestion-topic"] # insert SNS topic ARN here to send emails for errors
 cloudwatch_sns_topics = ["arn:aws:sns:us-east-1:911061262852:production-sdc-dot-hadoop-ingestion-topic"]
-ecs_account_number       = "004118380849"
-is_quarantine_account    = true
+mirror_account_number       = "004118380849"

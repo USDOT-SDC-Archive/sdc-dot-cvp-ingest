@@ -126,7 +126,7 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                 "lambda:InvokeFunction",
                 "lambda:GetFunctionConfiguration"
             ],
-            "Resource": "arn:aws:lambda:${var.aws_region}:${local.current_account_number}:function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%"
+            "Resource": "arn:aws:lambda:${var.aws_region}:${var.account_number}:function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%"
         },
         {
             "Effect": "Allow",
@@ -153,7 +153,7 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                 "logs:PutLogEvents"
             ],
             "Resource": [
-                "arn:aws:logs:${var.aws_region}:${local.current_account_number}:log-group:/aws/kinesisfirehose/${var.environment}-dot-sdc-cvpep-wydot-alert:log-stream:*"
+                "arn:aws:logs:${var.aws_region}:${var.account_number}:log-group:/aws/kinesisfirehose/${var.environment}-dot-sdc-cvpep-wydot-alert:log-stream:*"
             ]
         },
         {
@@ -164,7 +164,7 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                 "kinesis:GetShardIterator",
                 "kinesis:GetRecords"
             ],
-            "Resource": "arn:aws:kinesis:${var.aws_region}:${local.current_account_number}:stream/%FIREHOSE_STREAM_NAME%"
+            "Resource": "arn:aws:kinesis:${var.aws_region}:${var.account_number}:stream/%FIREHOSE_STREAM_NAME%"
         },
         {
             "Effect": "Allow",
@@ -179,7 +179,7 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                     "kms:ViaService": "kinesis.%REGION_NAME%.amazonaws.com"
                 },
                 "StringLike": {
-                    "kms:EncryptionContext:aws:kinesis:arn": "arn:aws:kinesis:%REGION_NAME%:${local.current_account_number}:stream/%FIREHOSE_STREAM_NAME%"
+                    "kms:EncryptionContext:aws:kinesis:arn": "arn:aws:kinesis:%REGION_NAME%:${var.account_number}:stream/%FIREHOSE_STREAM_NAME%"
                 }
             }
         }

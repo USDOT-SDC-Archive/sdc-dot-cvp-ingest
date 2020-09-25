@@ -60,7 +60,7 @@ resource "aws_iam_role" "IngestLambdaRole" {
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${local.current_account_number}:root",
+        "AWS": "arn:aws:iam::${var.account_number}:root",
         "Service": "lambda.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
@@ -94,7 +94,7 @@ resource "aws_iam_policy" "LambdaPermissions" {
     {
       "Effect": "Allow",
       "Action": "logs:CreateLogGroup",
-      "Resource": "arn:aws:logs:${var.aws_region}:${local.current_account_number}:*"
+      "Resource": "arn:aws:logs:${var.aws_region}:${var.account_number}:*"
     },
     {
       "Effect": "Allow",
@@ -103,7 +103,7 @@ resource "aws_iam_policy" "LambdaPermissions" {
           "logs:PutLogEvents"
       ],
       "Resource": [
-          "arn:aws:logs:${var.aws_region}:${local.current_account_number}:log-group:/aws/lambda/${var.environment}-dot-sdc-${var.data_providers[count.index]["name"]}-manual-ingest:*"
+          "arn:aws:logs:${var.aws_region}:${var.account_number}:log-group:/aws/lambda/${var.environment}-dot-sdc-${var.data_providers[count.index]["name"]}-manual-ingest:*"
       ]
     },
     {
