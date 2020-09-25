@@ -154,6 +154,11 @@ You can run the following on the ECS build box to install a different version of
 # assuming you are SSHed as ec2-user
 sudo su
 cd ~/
+
+# make sure libffi is installed
+yum install libffi-devel
+
+# install python 3.7
 curl -O https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz
 tar -xzf Python-3.7.9.tgz
 cd Python-3.7.9
