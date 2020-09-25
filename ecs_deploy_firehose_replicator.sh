@@ -14,7 +14,7 @@ ZIP_NAME="firehose_replicator.zip"
 CODE_DIR="firehose_replicator"
 
 # install requirements in a virtual environment
-python3 -m venv .venv
+python3.7 -m venv .venv
 . .venv/bin/activate
 pip3 install -r requirements.txt --upgrade
 deactivate
@@ -25,7 +25,7 @@ rm -f ZIP_NAME
 
 # Zip python files and dependencies
 export CURRENT_DIR=$(pwd)
-PYV=`python3 -c "import sys;t='{v[0]}.{v[1]}'.format(v=list(sys.version_info[:2]));sys.stdout.write(t)";`
+PYV=`python3.7 -c "import sys;t='{v[0]}.{v[1]}'.format(v=list(sys.version_info[:2]));sys.stdout.write(t)";`
 pushd .venv/lib/python$PYV/site-packages
 echo "Zipping site-packages..."
 zip -rq $CURRENT_DIR/$ZIP_NAME .

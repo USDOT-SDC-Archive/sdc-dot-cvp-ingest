@@ -146,7 +146,22 @@ This repository contains Lambda function implementation for the S3 data ingest f
 
 ## VIII. Development Setup
 
-### Prerequisites
+### Installing Python on build box
+
+You can run the following on the ECS build box to install a different version of python (e.g. `3.7.9`):
+
+```
+# assuming you are SSHed as ec2-user
+sudo su
+cd ~/
+curl -O https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz
+tar -xzf Python-3.7.9.tgz
+cd Python-3.7.9
+./configure --enable-optimizations
+make altinstall
+
+# and now you can use python3.7 as an alias
+```
 
 
 
