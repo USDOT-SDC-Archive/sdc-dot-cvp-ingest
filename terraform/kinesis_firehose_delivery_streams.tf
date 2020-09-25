@@ -407,7 +407,16 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_bsm" {
         }
 
         processing_configuration {
-            enabled = false
+            enabled = true
+
+            processors {
+                type = "Lambda"
+
+                parameters {
+                    parameter_name  = "LambdaArn"
+                    parameter_value = "${aws_lambda_function.FirehoseReplicatorBSMLambda[0].arn}:$LATEST"
+                }
+            }
         }
     }
 
@@ -442,7 +451,16 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_tim" {
         }
 
         processing_configuration {
-            enabled = false
+            enabled = true
+
+            processors {
+                type = "Lambda"
+
+                parameters {
+                    parameter_name  = "LambdaArn"
+                    parameter_value = "${aws_lambda_function.FirehoseReplicatorTIMLambda[0].arn}:$LATEST"
+                }
+            }
         }
     }
 
