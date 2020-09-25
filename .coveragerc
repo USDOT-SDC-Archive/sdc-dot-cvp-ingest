@@ -3,7 +3,7 @@ branch = True
 include=
     *.py
 omit=
-    test*.py
+    */tests/*
     */__init__.py
     */python*
 
