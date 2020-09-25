@@ -32,11 +32,7 @@ resource "aws_iam_policy" "firehose_managed_policy" {
                 "lambda:InvokeFunction",
                 "lambda:GetFunctionConfiguration"
             ],
-            "Resource": [
-                "${aws_lambda_function.FirehoseReplicatorAlertsLambda.arn}:$LATEST",
-                "${aws_lambda_function.FirehoseReplicatorTIMLambda.arn}:$LATEST",
-                "${aws_lambda_function.FirehoseReplicatorBSMLambda.arn}:$LATEST"
-            ]
+            "Resource": "${aws_lambda_function.FirehoseReplicatorAlertsLambda.arn}:$LATEST"
         },
         {
             "Sid": "Stmt4",
@@ -246,7 +242,7 @@ resource "aws_iam_role_policy" "firehose_wydot_bsm_inline_policy_1" {
             "Resource": "*"
         },
         {
-            "Sid": "",
+            "Sid": "Stmt3",
             "Effect": "Allow",
             "Action": [
                 "s3:AbortMultipartUpload",
@@ -260,6 +256,15 @@ resource "aws_iam_role_policy" "firehose_wydot_bsm_inline_policy_1" {
                 "${local.data_lake_bucket_arn}/*",
                 "${local.data_lake_bucket_arn}"
             ]
+        },
+        {
+            "Sid": "Stmt4",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:InvokeFunction",
+                "lambda:GetFunctionConfiguration"
+            ],
+            "Resource": "${aws_lambda_function.FirehoseReplicatorBSMLambda.arn}:$LATEST"
         }
     ]
 }
@@ -320,7 +325,7 @@ resource "aws_iam_role_policy" "firehose_wydot_tim_inline_policy_1" {
             "Resource": "*"
         },
         {
-            "Sid": "",
+            "Sid": "Stmt3",
             "Effect": "Allow",
             "Action": [
                 "s3:AbortMultipartUpload",
@@ -334,6 +339,15 @@ resource "aws_iam_role_policy" "firehose_wydot_tim_inline_policy_1" {
                 "${local.data_lake_bucket_arn}/*",
                 "${local.data_lake_bucket_arn}"
             ]
+        },
+        {
+            "Sid": "Stmt4",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:InvokeFunction",
+                "lambda:GetFunctionConfiguration"
+            ],
+            "Resource": "${aws_lambda_function.FirehoseReplicatorTIMLambda.arn}:$LATEST"
         }
     ]
 }
