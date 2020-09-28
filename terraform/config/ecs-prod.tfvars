@@ -24,9 +24,9 @@ data_providers = [{
     name = "cvpep-wydot"
     data_lake_destination = "cv/wydot/"
 }]
-data_lake_bucket = "dev-dot-sdc-raw-submissions-004118380849-us-east-1"
-data_lake_kms_key_arn = "arn:aws:kms:us-east-1:004118380849:key/9adf6456-e6c6-47d5-8a9e-a137fac21759"
+data_lake_bucket = "prod-dot-sdc-raw-submissions-004118380849-us-east-1"
+data_lake_kms_key_arn = "arn:aws:kms:us-east-1:004118380849:alias/aws/s3"
 lambda_binary_bucket = "prod-lambda-bucket-004118380849"
-lambda_error_actions = [] # insert SNS topic ARN here to send emails for errors
-cloudwatch_sns_topics = []
+lambda_error_actions = ["arn:aws:sns:us-east-1:004118380849:prod-hadoop-ingestion-errors"] # insert SNS topic ARN here to send emails for errors
+cloudwatch_sns_topics = ["arn:aws:sns:us-east-1:004118380849:prod-hadoop-ingestion-errors"]
 mirror_account_number    = "911061262852"
