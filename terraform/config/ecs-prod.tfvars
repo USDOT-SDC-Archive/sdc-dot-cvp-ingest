@@ -25,8 +25,8 @@ data_providers = [{
     data_lake_destination = "cv/wydot/"
 }]
 data_lake_bucket = "prod-dot-sdc-raw-submissions-004118380849-us-east-1"
-data_lake_bucket_arn = "arn:aws:s3:::prod-dot-sdc-raw-submissions-004118380849-us-east-1"
 data_lake_kms_key_arn = "arn:aws:kms:us-east-1:004118380849:alias/aws/s3"
 lambda_binary_bucket = "prod-lambda-bucket-004118380849"
 lambda_error_actions = ["arn:aws:sns:us-east-1:004118380849:prod-hadoop-ingestion-errors"] # insert SNS topic ARN here to send emails for errors
 cloudwatch_sns_topics = ["arn:aws:sns:us-east-1:004118380849:prod-hadoop-ingestion-errors"]
+mirror_account_number    = "911061262852"

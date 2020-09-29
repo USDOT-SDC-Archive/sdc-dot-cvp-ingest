@@ -6,6 +6,7 @@
 htmlcov/**
 .vscode/
 venv/**
+**/.venv
 .coverage
 html_coverage_reports/**
 *.zip

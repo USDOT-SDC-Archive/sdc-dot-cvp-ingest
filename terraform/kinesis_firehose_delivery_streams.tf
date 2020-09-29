@@ -26,7 +26,16 @@ resource "aws_iam_policy" "firehose_managed_policy" {
             "Resource": "*"
         },
         {
-            "Sid": "",
+            "Sid": "Stmt3",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:InvokeFunction",
+                "lambda:GetFunctionConfiguration"
+            ],
+            "Resource": "${aws_lambda_function.FirehoseReplicatorAlertsLambda.arn}:$LATEST"
+        },
+        {
+            "Sid": "Stmt4",
             "Effect": "Allow",
             "Action": [
                 "s3:AbortMultipartUpload",
@@ -37,8 +46,8 @@ resource "aws_iam_policy" "firehose_managed_policy" {
                 "s3:PutObject"
             ],
             "Resource": [
-                "${var.data_lake_bucket_arn}/*",
-                "${var.data_lake_bucket_arn}"
+                "${local.data_lake_bucket_arn}/*",
+                "${local.data_lake_bucket_arn}"
             ]
         }
     ]
@@ -104,8 +113,8 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                 "s3:PutObject"
             ],
             "Resource": [
-                "${var.data_lake_bucket_arn}",
-                "${var.data_lake_bucket_arn}/*",
+                "${local.data_lake_bucket_arn}",
+                "${local.data_lake_bucket_arn}/*",
                 "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%",
                 "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
             ]
@@ -133,7 +142,7 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                     "kms:ViaService": "s3.${var.aws_region}.amazonaws.com"
                 },
                 "StringLike": {
-                    "kms:EncryptionContext:aws:s3:arn": "${var.data_lake_bucket_arn}/cv/wydot/alert/*"
+                    "kms:EncryptionContext:aws:s3:arn": "${local.data_lake_bucket_arn}/cv/wydot/alert/*"
                 }
             }
         },
@@ -233,7 +242,7 @@ resource "aws_iam_role_policy" "firehose_wydot_bsm_inline_policy_1" {
             "Resource": "*"
         },
         {
-            "Sid": "",
+            "Sid": "Stmt3",
             "Effect": "Allow",
             "Action": [
                 "s3:AbortMultipartUpload",
@@ -244,9 +253,18 @@ resource "aws_iam_role_policy" "firehose_wydot_bsm_inline_policy_1" {
                 "s3:PutObject"
             ],
             "Resource": [
-                "${var.data_lake_bucket_arn}/*",
-                "${var.data_lake_bucket_arn}"
+                "${local.data_lake_bucket_arn}/*",
+                "${local.data_lake_bucket_arn}"
             ]
+        },
+        {
+            "Sid": "Stmt4",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:InvokeFunction",
+                "lambda:GetFunctionConfiguration"
+            ],
+            "Resource": "${aws_lambda_function.FirehoseReplicatorBSMLambda.arn}:$LATEST"
         }
     ]
 }
@@ -307,7 +325,7 @@ resource "aws_iam_role_policy" "firehose_wydot_tim_inline_policy_1" {
             "Resource": "*"
         },
         {
-            "Sid": "",
+            "Sid": "Stmt3",
             "Effect": "Allow",
             "Action": [
                 "s3:AbortMultipartUpload",
@@ -318,9 +336,18 @@ resource "aws_iam_role_policy" "firehose_wydot_tim_inline_policy_1" {
                 "s3:PutObject"
             ],
             "Resource": [
-                "${var.data_lake_bucket_arn}/*",
-                "${var.data_lake_bucket_arn}"
+                "${local.data_lake_bucket_arn}/*",
+                "${local.data_lake_bucket_arn}"
             ]
+        },
+        {
+            "Sid": "Stmt4",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:InvokeFunction",
+                "lambda:GetFunctionConfiguration"
+            ],
+            "Resource": "${aws_lambda_function.FirehoseReplicatorTIMLambda.arn}:$LATEST"
         }
     ]
 }
@@ -338,7 +365,7 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_alert" {
     }
 
     extended_s3_configuration {
-        bucket_arn         = var.data_lake_bucket_arn
+        bucket_arn         = local.data_lake_bucket_arn
         buffer_interval    = 60
         buffer_size        = 5
         compression_format = "GZIP"
@@ -354,7 +381,16 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_alert" {
         }
 
         processing_configuration {
-            enabled = false
+            enabled = true
+
+            processors {
+                type = "Lambda"
+
+                parameters {
+                    parameter_name  = "LambdaArn"
+                    parameter_value = "${aws_lambda_function.FirehoseReplicatorAlertsLambda.arn}:$LATEST"
+                }
+            }
         }
     }
 
@@ -373,7 +409,7 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_bsm" {
     }
 
     extended_s3_configuration {
-        bucket_arn         = var.data_lake_bucket_arn
+        bucket_arn         = local.data_lake_bucket_arn
         buffer_interval    = 60
         buffer_size        = 5
         compression_format = "GZIP"
@@ -389,7 +425,16 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_bsm" {
         }
 
         processing_configuration {
-            enabled = false
+            enabled = true
+
+            processors {
+                type = "Lambda"
+
+                parameters {
+                    parameter_name  = "LambdaArn"
+                    parameter_value = "${aws_lambda_function.FirehoseReplicatorBSMLambda.arn}:$LATEST"
+                }
+            }
         }
     }
 
@@ -408,7 +453,7 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_tim" {
     }
 
     extended_s3_configuration {
-        bucket_arn         = var.data_lake_bucket_arn
+        bucket_arn         = local.data_lake_bucket_arn
         buffer_interval    = 60
         buffer_size        = 5
         compression_format = "GZIP"
@@ -424,7 +469,16 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_tim" {
         }
 
         processing_configuration {
-            enabled = false
+            enabled = true
+
+            processors {
+                type = "Lambda"
+
+                parameters {
+                    parameter_name  = "LambdaArn"
+                    parameter_value = "${aws_lambda_function.FirehoseReplicatorTIMLambda.arn}:$LATEST"
+                }
+            }
         }
     }
 

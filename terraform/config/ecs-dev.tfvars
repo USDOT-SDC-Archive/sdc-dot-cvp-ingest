@@ -27,8 +27,8 @@ data_providers = [{
     data_lake_destination = "cv/wydot/"
 }]
 data_lake_bucket = "dev-dot-sdc-raw-submissions-505135622787-us-east-1"
-data_lake_bucket_arn = "arn:aws:s3:::dev-dot-sdc-raw-submissions-505135622787-us-east-1"
 data_lake_kms_key_arn = "arn:aws:kms:us-east-1:505135622787:key/a5480c3b-e32b-44f4-b9c4-4804b2ff331e"
 lambda_binary_bucket = "dev-lambda-bucket-505135622787"
 lambda_error_actions = [] # insert SNS topic ARN here to send emails for errors
 cloudwatch_sns_topics = []
+mirror_account_number    = "911061262852"
