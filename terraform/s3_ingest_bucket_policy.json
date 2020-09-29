@@ -1,0 +1,20 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowIngestLambdas",
+      "Action": [
+        "s3:PutObject",
+        "s3:PutObjectAcl",
+        "s3:PutObjectVersionAcl"
+      ],
+      "Effect": "Allow",
+      "Resource": "${ingest_bucket_arn}/*",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::${mirror_account_number}:role/${environment}-dot-sdc-${provider_name}-manual-ingest"
+        ]
+      }
+    }
+  ]
+}
