@@ -4,7 +4,6 @@ account_number = "505135622787"
 vpc_id = "vpc-05edb6463359c7c07"
 subnet_ids = ["subnet-0f6f996e1255c2e17",
               "subnet-00469310e3c8854b2"]
-# tianna can you check these tags?
 data_providers = [{
     ingest_bucket = "dev-dot-sdc-cvp-nyc-ingest-505135622787"
     mirror_bucket = "dev-dot-sdc-cvp-nyc-ingest"
