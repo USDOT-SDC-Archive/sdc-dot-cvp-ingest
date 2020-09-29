@@ -34,26 +34,25 @@ def lambda_handler(event, context):
     target_bucket = os.environ['TARGET_DATA_BUCKET']
     mirror_bucket = os.environ['MIRROR_DATA_BUCKET']
     target_data_folder_path = bucket_destination_mapping()[source_bucket]
-    mirror_data_folder_path = mirror_destination_mapping()[mirror_bucket]
+    # mirror_data_folder_path = mirror_destination_mapping()[mirror_bucket]
     source_key_path = os.path.dirname(source_key)
     source_key_filename = os.path.basename(source_key)
     now = datetime.now()
     target_key = os.path.join(target_data_folder_path, source_key_path, now.strftime('%Y'), now.strftime('%m'), now.strftime('%d'), source_key_filename)
-    mirror_key = os.path.join(mirror_data_folder_path, source_key_path, now.strftime('%Y'), now.strftime('%m'), now.strftime('%d'), source_key_filename)
+    # mirror_key = os.path.join(mirror_data_folder_path, source_key_path, now.strftime('%Y'), now.strftime('%m'), now.strftime('%d'), source_key_filename)
 
     logging.info(f'target_bucket: {target_bucket}')
     logging.info(f'target_key: {target_key}')
     logging.info(f'mirror_bucket: {mirror_bucket}')
-    logging.info(f'mirror_key: {target_key}')
 
     chunk_ranges = create_upload_chunks(file_size)
     logging.info(f'file_size: {file_size}')
     logging.info(f'uploading file in chunks: {chunk_ranges}')
 
-    upload_file(chunk_ranges, source_bucket, source_key, target_bucket, target_key, mirror_bucket, mirror_key)
+    upload_file(chunk_ranges, source_bucket, source_key, target_bucket, target_key, mirror_bucket)
 
 
-def upload_file(chunk_ranges, source_bucket, source_key, target_bucket, target_key, mirror_bucket, mirror_key):
+def upload_file(chunk_ranges, source_bucket, source_key, target_bucket, target_key, mirror_bucket):
     s3 = boto3.client('s3')
     copy_source = {'Bucket': source_bucket, 'Key': source_key}
     copy_time_start = time.perf_counter()
@@ -77,7 +76,7 @@ def upload_file(chunk_ranges, source_bucket, source_key, target_bucket, target_k
         mirror_response = s3.upload_part_copy(CopySourceRange=copy_source_range,
                                         CopySource=copy_source,
                                         Bucket=mirror_bucket,
-                                        Key=mirror_key,
+                                        Key=target_key,
                                         UploadId=mirror_multipart_id,
                                         PartNumber=i)
 
@@ -99,7 +98,7 @@ def upload_file(chunk_ranges, source_bucket, source_key, target_bucket, target_k
 
     mirror_multipart_upload_parts = {'Parts': mirror_e_tags}
     response = s3.complete_multipart_upload(Bucket=mirror_bucket,
-                                            Key=mirror_key,
+                                            Key=target_key,
                                             MultipartUpload=mirror_multipart_upload_parts,
                                             UploadId=mirror_multipart_id)
 
@@ -124,5 +123,5 @@ def create_upload_chunks(file_size, chunk_size = CHUNK_SIZE):
 def bucket_destination_mapping():
     return json.loads(os.environ['BUCKET_PATH_MAPPING'])
 
-def mirror_destination_mapping():
-    return json.loads(os.environ['MIRROR_BUCKET_PATH_MAPPING'])
+# def mirror_destination_mapping():
+#     return json.loads(os.environ['MIRROR_BUCKET_PATH_MAPPING'])
