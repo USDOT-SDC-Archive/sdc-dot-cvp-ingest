@@ -16,7 +16,7 @@ CODE_DIR="firehose_replicator"
 # install requirements in a virtual environment
 python3.7 -m venv .venv
 . .venv/bin/activate
-pip3 install -r requirements.txt --upgrade
+pip3 install -r requirements-prod.txt --upgrade
 deactivate
 
 # Remove existing zip to avoid any bugs related to updating it
