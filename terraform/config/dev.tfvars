@@ -6,6 +6,7 @@ subnet_ids = ["subnet-1d181f40", "subnet-b29f87d6"]
 # tianna can you check these tags?
 data_providers = [{
     ingest_bucket = "dev-dot-sdc-cvp-nyc-ingest"
+    mirror_bucket = "dev-dot-sdc-cvp-nyc-ingest-505135622787"
     project = "CVP"
     team = "cvp-nyc"
     name = "cvpep-nyc"
@@ -13,6 +14,7 @@ data_providers = [{
 },
 {
     ingest_bucket = "dev-dot-sdc-cvp-thea-ingest"
+    mirror_bucket = "dev-dot-sdc-cvp-thea-ingest-505135622787"
     team = "cvp-thea"
     project = "CVP"
     name = "cvpep-thea"
@@ -20,17 +22,11 @@ data_providers = [{
 },
 {
     ingest_bucket = "dev-dot-sdc-cvp-wydot-ingest"
+    mirror_bucket = "dev-dot-sdc-cvp-wydot-ingest-505135622787"
     project = "CVP"
     team = "cvp-wydot"
     name = "cvpep-wydot"
     data_lake_destination = "cv/wydot/"
-},
-{
-    ingest_bucket = "dev-dot-sdc-btsffa-atri-ingest"
-    project = "FMI"
-    team = "fmi-atri"
-    name = "btsffa-atri"
-    data_lake_destination = "btsffa/atri/"
 }]
 data_lake_bucket = "dev-dot-sdc-raw-submissions-911061262852-us-east-1"
 data_lake_kms_key_arn = "arn:aws:kms:us-east-1:911061262852:key/ad203c13-d93c-4981-b49c-8c0910c4f878"
