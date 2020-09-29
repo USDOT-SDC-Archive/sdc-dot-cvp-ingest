@@ -14,7 +14,7 @@ deactivate
 
 # Remove existing zip to avoid any bugs related to updating it
 echo "Removing existing zip (if applicable)"
-rm -f ZIP_NAME
+rm -f $ZIP_NAME
 
 # Zip python files and dependencies
 export CURRENT_DIR=$(pwd)
