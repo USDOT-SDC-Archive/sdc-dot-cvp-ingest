@@ -29,6 +29,7 @@ variable "subnet_ids" {
 variable "data_providers" {
   type = list(object({
     ingest_bucket = string
+    mirror_bucket = string
     name = string
     project = string
     team = string
