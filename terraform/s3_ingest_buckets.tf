@@ -16,11 +16,9 @@ resource "aws_s3_bucket" "data_provider_manual_ingest_bucket" {
     }
 
     # Allow mirror account lambda roles to put objects into this bucket and make us owner
-    # Must be kept in sync with XXXX
+    # Must be kept in sync with aws_iam_role.IngestLambdaRole
     policy = templatefile("s3_ingest_bucket_policy.json", {
         ingest_bucket_arn = "arn:aws:s3:::${var.data_providers[count.index]["ingest_bucket"]}"
-        mirror_account_number = var.mirror_account_number,
-        environment = var.environment
-        provider_name = var.data_providers[count.index]["name"]
+        mirror_role_arn = "arn:aws:iam::${var.mirror_account_number}:role/${var.environment}-dot-sdc-${var.data_providers[count.index]["name"]}-manual-ingest"
     })
 }

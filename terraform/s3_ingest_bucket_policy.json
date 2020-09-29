@@ -12,7 +12,7 @@
       "Resource": "${ingest_bucket_arn}/*",
       "Principal": {
         "AWS": [
-          "arn:aws:iam::${mirror_account_number}:role/${environment}-dot-sdc-${provider_name}-manual-ingest"
+          "${mirror_role_arn}"
         ]
       }
     }
