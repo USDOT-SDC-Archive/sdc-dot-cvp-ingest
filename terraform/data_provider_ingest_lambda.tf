@@ -20,6 +20,8 @@ resource "aws_lambda_function" "IngestLambda" {
         variables = {
             TARGET_DATA_BUCKET = var.data_lake_bucket
             BUCKET_PATH_MAPPING = jsonencode(map(var.data_providers[count.index]["ingest_bucket"], var.data_providers[count.index]["data_lake_destination"]))
+            MIRROR_DATA_BUCKET = local.mirror_raw_bucket_name
+            MIRROR_BUCKET_PATH_MAPPING = jsonencode(map(var.data_providers[count.index]["mirror_bucket"], var.data_providers[count.index]["data_lake_destination"]))
         }
     }
     vpc_config {
