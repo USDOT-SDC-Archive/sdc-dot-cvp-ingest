@@ -56,7 +56,7 @@ def upload_file(chunk_ranges, source_bucket, source_key, target_bucket, target_k
     copy_time_start = time.perf_counter()
     # create a multipart upload connection and store the upload id for the connection
     multipart_id = s3.create_multipart_upload(Bucket=target_bucket, Key=target_key, ServerSideEncryption='AES256')['UploadId']
-    mirror_multipart_id = s3.create_multipart_upload(Bucket=mirror_bucket, Key=target_key, ServerSideEncryption='AES256')['UploadId']
+    mirror_multipart_id = s3.create_multipart_upload(Bucket=mirror_bucket, Key=target_key, ServerSideEncryption='AES256', ACL='bucket-owner-full-control')['UploadId']
     e_tags = []
     mirror_e_tags = []
 
