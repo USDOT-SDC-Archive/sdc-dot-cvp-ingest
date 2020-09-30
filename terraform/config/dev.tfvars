@@ -3,7 +3,6 @@ aws_region = "us-east-1"
 account_number = "911061262852"
 vpc_id = "vpc-40a23b3b"
 subnet_ids = ["subnet-1d181f40", "subnet-b29f87d6"]
-# tianna can you check these tags?
 data_providers = [{
     ingest_bucket = "dev-dot-sdc-cvp-nyc-ingest"
     project = "CVP"
@@ -24,13 +23,6 @@ data_providers = [{
     team = "cvp-wydot"
     name = "cvpep-wydot"
     data_lake_destination = "cv/wydot/"
-},
-{
-    ingest_bucket = "dev-dot-sdc-btsffa-atri-ingest"
-    project = "FMI"
-    team = "fmi-atri"
-    name = "btsffa-atri"
-    data_lake_destination = "btsffa/atri/"
 }]
 data_lake_bucket = "dev-dot-sdc-raw-submissions-911061262852-us-east-1"
 data_lake_kms_key_arn = "arn:aws:kms:us-east-1:911061262852:key/ad203c13-d93c-4981-b49c-8c0910c4f878"

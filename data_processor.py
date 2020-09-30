@@ -32,6 +32,7 @@ def lambda_handler(event, context):
     file_size = event['Records'][0]['s3']['object']['size']
 
     target_bucket = os.environ['TARGET_DATA_BUCKET']
+    mirror_bucket = os.environ['MIRROR_DATA_BUCKET']
     target_data_folder_path = bucket_destination_mapping()[source_bucket]
     source_key_path = os.path.dirname(source_key)
     source_key_filename = os.path.basename(source_key)
@@ -40,21 +41,25 @@ def lambda_handler(event, context):
 
     logging.info(f'target_bucket: {target_bucket}')
     logging.info(f'target_key: {target_key}')
+    logging.info(f'mirror_bucket: {mirror_bucket}')
 
     chunk_ranges = create_upload_chunks(file_size)
     logging.info(f'file_size: {file_size}')
     logging.info(f'uploading file in chunks: {chunk_ranges}')
 
-    upload_file(chunk_ranges, source_bucket, source_key, target_bucket, target_key)
+    upload_file(chunk_ranges, source_bucket, source_key, target_bucket, target_key, mirror_bucket)
 
 
-def upload_file(chunk_ranges, source_bucket, source_key, target_bucket, target_key):
+def upload_file(chunk_ranges, source_bucket, source_key, target_bucket, target_key, mirror_bucket):
     s3 = boto3.client('s3')
     copy_source = {'Bucket': source_bucket, 'Key': source_key}
     copy_time_start = time.perf_counter()
     # create a multipart upload connection and store the upload id for the connection
     multipart_id = s3.create_multipart_upload(Bucket=target_bucket, Key=target_key, ServerSideEncryption='AES256')['UploadId']
+    mirror_multipart_id = s3.create_multipart_upload(Bucket=mirror_bucket, Key=target_key, ServerSideEncryption='AES256', ACL='bucket-owner-full-control')['UploadId']
     e_tags = []
+    mirror_e_tags = []
+
     for i, copy_source_range in enumerate(chunk_ranges, start=1):
         logging.info(f'uploading chunk: {copy_source_range}')
         copy_part_start = time.perf_counter()
@@ -66,6 +71,13 @@ def upload_file(chunk_ranges, source_bucket, source_key, target_bucket, target_k
                                         UploadId=multipart_id,
                                         PartNumber=i)
 
+        mirror_response = s3.upload_part_copy(CopySourceRange=copy_source_range,
+                                        CopySource=copy_source,
+                                        Bucket=mirror_bucket,
+                                        Key=target_key,
+                                        UploadId=mirror_multipart_id,
+                                        PartNumber=i)
+
         copy_part_stop = time.perf_counter()
         copy_part_time = copy_part_stop - copy_part_start
         logging.info(f'Chunk: {copy_source_range} took {copy_part_time} seconds')
@@ -73,11 +85,20 @@ def upload_file(chunk_ranges, source_bucket, source_key, target_bucket, target_k
         e_tag = response['CopyPartResult']['ETag']
         e_tags.append({'ETag': e_tag, 'PartNumber': i})
 
+        mirror_e_tag = mirror_response['CopyPartResult']['ETag']
+        mirror_e_tags.append({'ETag': mirror_e_tag, 'PartNumber': i})
+
     multipart_upload_parts = {'Parts': e_tags}
     response = s3.complete_multipart_upload(Bucket=target_bucket,
                                             Key=target_key,
                                             MultipartUpload=multipart_upload_parts,
                                             UploadId=multipart_id)
+
+    mirror_multipart_upload_parts = {'Parts': mirror_e_tags}
+    response = s3.complete_multipart_upload(Bucket=mirror_bucket,
+                                            Key=target_key,
+                                            MultipartUpload=mirror_multipart_upload_parts,
+                                            UploadId=mirror_multipart_id)
 
     copy_time_end = time.perf_counter()
     copy_time = copy_time_end - copy_time_start

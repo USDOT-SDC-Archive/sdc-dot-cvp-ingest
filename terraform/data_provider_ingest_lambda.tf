@@ -20,6 +20,7 @@ resource "aws_lambda_function" "IngestLambda" {
         variables = {
             TARGET_DATA_BUCKET = var.data_lake_bucket
             BUCKET_PATH_MAPPING = jsonencode(map(var.data_providers[count.index]["ingest_bucket"], var.data_providers[count.index]["data_lake_destination"]))
+            MIRROR_DATA_BUCKET = local.mirror_raw_bucket_name
         }
     }
     vpc_config {
@@ -50,6 +51,7 @@ resource "aws_cloudwatch_metric_alarm" "IngestLambdaErrors" {
               Project = var.data_providers[count.index]["project"]}, local.team_global_tags)
 }
 
+# Must also be kept in sync with https://github.com/usdot-jpo-sdc-projects/sdc-dot-waze-pipeline/blob/master/terraform/raw_submissions_s3_bucket.tf#L78
 resource "aws_iam_role" "IngestLambdaRole" {
   count = length(var.data_providers)
   name = "${var.environment}-dot-sdc-${var.data_providers[count.index]["name"]}-manual-ingest"
@@ -121,6 +123,19 @@ resource "aws_iam_policy" "LambdaPermissions" {
         "s3:PutObject"
       ],
       "Resource": ["arn:aws:s3:::${var.data_lake_bucket}/*", "arn:aws:s3:::${var.data_lake_bucket}"]
+    },
+    {
+      "Sid": "AllowPushToMirrorRawSubmission",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:PutObjectAcl",
+        "s3:PutObjectVersionAcl",
+        "s3:AbortMultipartUpload",
+        "s3:ListMultipartUploadParts"
+      ],
+      "Resource": "${local.mirror_raw_bucket_arn}/*"
     }
   ]
 }
