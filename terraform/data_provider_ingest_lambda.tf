@@ -123,6 +123,19 @@ resource "aws_iam_policy" "LambdaPermissions" {
         "s3:PutObject"
       ],
       "Resource": ["arn:aws:s3:::${var.data_lake_bucket}/*", "arn:aws:s3:::${var.data_lake_bucket}"]
+    },
+    {
+      "Sid": "AllowPushToMirrorRawSubmission",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:PutObjectAcl",
+        "s3:PutObjectVersionAcl",
+        "s3:AbortMultipartUpload",
+        "s3:ListMultipartUploadParts"
+      ],
+      "Resource": "${local.mirror_raw_bucket_arn}/*"
     }
   ]
 }
