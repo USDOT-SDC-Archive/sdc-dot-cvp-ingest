@@ -6,7 +6,6 @@ subnet_ids = ["subnet-0f6f996e1255c2e17",
               "subnet-00469310e3c8854b2"]
 data_providers = [{
     ingest_bucket = "dev-dot-sdc-cvp-nyc-ingest-505135622787"
-    mirror_bucket = "dev-dot-sdc-cvp-nyc-ingest"
     project = "CVP"
     team = "cvp-nyc"
     name = "cvpep-nyc"
@@ -14,7 +13,6 @@ data_providers = [{
 },
 {
     ingest_bucket = "dev-dot-sdc-cvp-thea-ingest-505135622787"
-    mirror_bucket = "dev-dot-sdc-cvp-thea-ingest"
     team = "cvp-thea"
     project = "CVP"
     name = "cvpep-thea"
@@ -22,7 +20,6 @@ data_providers = [{
 },
 {
     ingest_bucket = "dev-dot-sdc-cvp-wydot-ingest-505135622787"
-    mirror_bucket = "dev-dot-sdc-cvp-wydot-ingest"
     project = "CVP"
     team = "cvp-wydot"
     name = "cvpep-wydot"
