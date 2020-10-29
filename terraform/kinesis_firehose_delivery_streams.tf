@@ -26,15 +26,6 @@ resource "aws_iam_policy" "firehose_managed_policy" {
             "Resource": "*"
         },
         {
-            "Sid": "Stmt3",
-            "Effect": "Allow",
-            "Action": [
-                "lambda:InvokeFunction",
-                "lambda:GetFunctionConfiguration"
-            ],
-            "Resource": "${aws_lambda_function.FirehoseReplicatorAlertsLambda.arn}:$LATEST"
-        },
-        {
             "Sid": "Stmt4",
             "Effect": "Allow",
             "Action": [
@@ -256,15 +247,6 @@ resource "aws_iam_role_policy" "firehose_wydot_bsm_inline_policy_1" {
                 "${local.data_lake_bucket_arn}/*",
                 "${local.data_lake_bucket_arn}"
             ]
-        },
-        {
-            "Sid": "Stmt4",
-            "Effect": "Allow",
-            "Action": [
-                "lambda:InvokeFunction",
-                "lambda:GetFunctionConfiguration"
-            ],
-            "Resource": "${aws_lambda_function.FirehoseReplicatorBSMLambda.arn}:$LATEST"
         }
     ]
 }
@@ -339,15 +321,6 @@ resource "aws_iam_role_policy" "firehose_wydot_tim_inline_policy_1" {
                 "${local.data_lake_bucket_arn}/*",
                 "${local.data_lake_bucket_arn}"
             ]
-        },
-        {
-            "Sid": "Stmt4",
-            "Effect": "Allow",
-            "Action": [
-                "lambda:InvokeFunction",
-                "lambda:GetFunctionConfiguration"
-            ],
-            "Resource": "${aws_lambda_function.FirehoseReplicatorTIMLambda.arn}:$LATEST"
         }
     ]
 }
@@ -381,16 +354,7 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_alert" {
         }
 
         processing_configuration {
-            enabled = true
-
-            processors {
-                type = "Lambda"
-
-                parameters {
-                    parameter_name  = "LambdaArn"
-                    parameter_value = "${aws_lambda_function.FirehoseReplicatorAlertsLambda.arn}:$LATEST"
-                }
-            }
+            enabled = false
         }
     }
 
@@ -425,16 +389,7 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_bsm" {
         }
 
         processing_configuration {
-            enabled = true
-
-            processors {
-                type = "Lambda"
-
-                parameters {
-                    parameter_name  = "LambdaArn"
-                    parameter_value = "${aws_lambda_function.FirehoseReplicatorBSMLambda.arn}:$LATEST"
-                }
-            }
+            enabled = false
         }
     }
 
