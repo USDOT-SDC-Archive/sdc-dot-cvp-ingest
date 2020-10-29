@@ -12,7 +12,6 @@ TARGET_KEY = 'cv/thea/'
 SOURCE_KEY = 'bsm/file.csv'
 BUCKET_NAME = 'test'
 DESTINATION_BUCKET_NAME = 'random_target_bucket'
-MIRROR_BUCKET = 'mirror_bucket'
 event_data = {
     "Records":
         [
@@ -36,12 +35,10 @@ os.environ["AWS_SECRET_ACCESS_KEY"] = "test"
 
 def setup_buckets():
     os.environ['TARGET_DATA_BUCKET'] = 'random_target_bucket'
-    os.environ['MIRROR_DATA_BUCKET'] = MIRROR_BUCKET
     os.environ['BUCKET_PATH_MAPPING'] = json.dumps({BUCKET_NAME: TARGET_KEY})
 
     s3 = boto3.client('s3', region_name="us-east-1")
     s3.create_bucket(Bucket=BUCKET_NAME)
-    s3.create_bucket(Bucket=MIRROR_BUCKET)
     s3.put_object(Bucket=BUCKET_NAME, Body='body', Key=SOURCE_KEY)
     s3.create_bucket(Bucket=DESTINATION_BUCKET_NAME)
 
