@@ -1,6 +1,7 @@
 resource "aws_iam_policy" "firehose_managed_policy" {
-    description = "WYDOT Kinesis firehose policy"
-    name        = "${var.environment}-dot-sdc-cvpep-wydot-kinesis-policy"
+    count = length(var.data_providers)
+    description = "${var.data_providers[count.index]["project"]} Kinesis firehose policy"
+    name        = "${var.environment}-dot-sdc-${var.data_providers[count.index]["project"]}-kinesis-policy"
     path        = "/"
     policy      = <<EOF
 {
@@ -13,7 +14,7 @@ resource "aws_iam_policy" "firehose_managed_policy" {
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:firehose:*:*:deliverystream/${var.environment}-dot-sdc-cvpep-wydot-*"
+                "arn:aws:firehose:*:*:deliverystream/${var.environment}-dot-sdc-${var.data_providers[count.index]["project"]}-*"
             ]
         },
         {
@@ -56,6 +57,7 @@ resource "aws_iam_policy" "firehose_managed_policy" {
 }
 
 resource "aws_iam_role" "firehose_role" {
+    count = length(var.data_providers)
     assume_role_policy    = <<EOF
 {
   "Version": "2012-10-17",
@@ -70,25 +72,26 @@ resource "aws_iam_role" "firehose_role" {
   ]
 }
     EOF
-    description           = "WYDOT Kinesis firehose role"
+    description           = "${var.data_providers[count.index]["project"]} Kinesis firehose role"
     force_detach_policies = false
     max_session_duration  = 3600
-    name                  = "${var.environment}-dot-sdc-cvpep-wydot-kinesis-role"
+    name                  = "${var.environment}-dot-sdc-${var.data_providers[count.index]["project"]}-kinesis-role"
     path                  = "/"
     tags                  = {
         Environment = var.environment,
-        Project = var.data_providers[2]["project"],
-        Team = var.data_providers[2]["team"]
+        Project = var.data_providers[count.index]["project"],
+        Team = var.data_providers[count.index]["team"]
     }
 }
 
 resource "aws_iam_role_policy_attachment" "firehose_attach_policy" {
-    policy_arn = aws_iam_policy.firehose_managed_policy.arn
-    role = aws_iam_role.firehose_role.name
+    policy_arn = aws_iam_policy.firehose_managed_policy[0].arn
+    role = aws_iam_role.firehose_role[0].name
 }
 
 resource "aws_iam_role_policy" "firehose_inline_policy_1" {
     name   = "oneClick_firehose_delivery_role_1530016803472"
+    count = length(var.data_providers)
     policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -142,7 +145,7 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                     "kms:ViaService": "s3.${var.aws_region}.amazonaws.com"
                 },
                 "StringLike": {
-                    "kms:EncryptionContext:aws:s3:arn": "${local.data_lake_bucket_arn}/cv/wydot/alert/*"
+                    "kms:EncryptionContext:aws:s3:arn": "${local.data_lake_bucket_arn}/${var.data_providers[count.index]["project"]}/alert/*"
                 }
             }
         },
@@ -153,7 +156,7 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
                 "logs:PutLogEvents"
             ],
             "Resource": [
-                "arn:aws:logs:${var.aws_region}:${var.account_number}:log-group:/aws/kinesisfirehose/${var.environment}-dot-sdc-cvpep-wydot-alert:log-stream:*"
+                "arn:aws:logs:${var.aws_region}:${var.account_number}:log-group:/aws/kinesisfirehose/${var.environment}-dot-sdc-${var.data_providers[count.index]["project"]}-alert:log-stream:*"
             ]
         },
         {
@@ -186,182 +189,17 @@ resource "aws_iam_role_policy" "firehose_inline_policy_1" {
     ]
 }
     EOF
-    role   = aws_iam_role.firehose_role.name
+    role   = aws_iam_role.firehose_role[0].name
 }
 
-resource "aws_iam_role" "firehose_wydot_bsm_role" {
-    assume_role_policy    = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "firehose.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-    EOF
-    description           = "WYDOT Kinesis firehose role"
-    force_detach_policies = false
-    max_session_duration  = 3600
-    name                  = "${var.environment}-dot-sdc-cvpep-wydot-bsm_role"
-    path                  = "/"
-    tags           = {
-        Environment = var.environment,
-        Project = var.data_providers[2]["project"],
-        Team = var.data_providers[2]["team"]
-    }
-}
-
-resource "aws_iam_role_policy" "firehose_wydot_bsm_inline_policy_1" {
-    name   = "${var.environment}-dot-sdc-cvpep-wydot-bsm_policy"
-    policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": [
-                "firehose:PutRecord",
-                "firehose:PutRecordBatch"
-            ],
-            "Effect": "Allow",
-            "Resource": [
-                "arn:aws:firehose:*:*:deliverystream/${var.environment}-dot-sdc-cvpep-wydot-bsm"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "firehose:DescribeDeliveryStream",
-                "firehose:ListDeliveryStreams",
-                "logs:PutLogEvents"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "Stmt3",
-            "Effect": "Allow",
-            "Action": [
-                "s3:AbortMultipartUpload",
-                "s3:GetBucketLocation",
-                "s3:GetObject",
-                "s3:ListBucket",
-                "s3:ListBucketMultipartUploads",
-                "s3:PutObject"
-            ],
-            "Resource": [
-                "${local.data_lake_bucket_arn}/*",
-                "${local.data_lake_bucket_arn}"
-            ]
-        },
-        {
-            "Sid": "Stmt4",
-            "Effect": "Allow",
-            "Action": [
-                "lambda:InvokeFunction",
-                "lambda:GetFunctionConfiguration"
-            ],
-            "Resource": "${aws_lambda_function.FirehoseReplicatorBSMLambda.arn}:$LATEST"
-        }
-    ]
-}
-    EOF
-    role   = aws_iam_role.firehose_wydot_bsm_role.name
-}
-
-resource "aws_iam_role" "firehose_wydot_tim_role" {
-    assume_role_policy    = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "firehose.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-    EOF
-    description           = "WYDOT Kinesis firehose role"
-    force_detach_policies = false
-    max_session_duration  = 3600
-    name                  = "${var.environment}-dot-sdc-cvpep-wydot-tim_role"
-    path                  = "/"
-    tags           = {
-        Environment = var.environment,
-        Project = var.data_providers[2]["project"],
-        Team = var.data_providers[2]["team"]
-    }
-}
-
-resource "aws_iam_role_policy" "firehose_wydot_tim_inline_policy_1" {
-    name   = "${var.environment}-dot-sdc-cvpep-wydot-tim_policy"
-    policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": [
-                "firehose:PutRecord",
-                "firehose:PutRecordBatch"
-            ],
-            "Effect": "Allow",
-            "Resource": [
-                "arn:aws:firehose:*:*:deliverystream/${var.environment}-dot-sdc-cvpep-wydot-tim"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "firehose:DescribeDeliveryStream",
-                "firehose:ListDeliveryStreams",
-                "logs:PutLogEvents"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "Stmt3",
-            "Effect": "Allow",
-            "Action": [
-                "s3:AbortMultipartUpload",
-                "s3:GetBucketLocation",
-                "s3:GetObject",
-                "s3:ListBucket",
-                "s3:ListBucketMultipartUploads",
-                "s3:PutObject"
-            ],
-            "Resource": [
-                "${local.data_lake_bucket_arn}/*",
-                "${local.data_lake_bucket_arn}"
-            ]
-        },
-        {
-            "Sid": "Stmt4",
-            "Effect": "Allow",
-            "Action": [
-                "lambda:InvokeFunction",
-                "lambda:GetFunctionConfiguration"
-            ],
-            "Resource": "${aws_lambda_function.FirehoseReplicatorTIMLambda.arn}:$LATEST"
-        }
-    ]
-}
-    EOF
-    role   = aws_iam_role.firehose_wydot_tim_role.name
-}
-
-resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_alert" {
+resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_OSS4ITS_alert" {
+    count = length(var.data_providers)
     destination    = "extended_s3"
-    name           = "${var.environment}-dot-sdc-cvpep-wydot-alert"
+    name           = "${var.environment}-dot-sdc-${var.data_providers[count.index]["project"]}-alert"
     tags           = {
         Environment = var.environment,
-        Project = var.data_providers[2]["project"],
-        Team = var.data_providers[2]["team"]
+        Project = var.data_providers[count.index]["project"],
+        Team = var.data_providers[count.index]["team"]
     }
 
     extended_s3_configuration {
@@ -370,13 +208,13 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_alert" {
         buffer_size        = 5
         compression_format = "GZIP"
         kms_key_arn        = var.data_lake_kms_key_arn
-        prefix             = "cv/wydot/alert/"
-        role_arn           = aws_iam_role.firehose_role.arn
+        prefix             = var.data_providers[count.index]["project"]
+        role_arn           = aws_iam_role.firehose_role[0].arn
         s3_backup_mode     = "Disabled"
 
         cloudwatch_logging_options {
             enabled         = true
-            log_group_name  = "/aws/kinesisfirehose/${var.environment}-dot-sdc-cvpep-wydot-alert"
+            log_group_name  = "/aws/kinesisfirehose/${var.environment}-dot-sdc-${var.data_providers[count.index]["project"]}-${var.data_providers[count.index]["project"]}-alert"
             log_stream_name = "S3Delivery"
         }
 
@@ -397,105 +235,18 @@ resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_alert" {
     server_side_encryption {
         enabled = false
     }
+depends_on = [aws_iam_role.firehose_role]
 }
-
-resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_bsm" {
-    destination    = "extended_s3"
-    name           = "${var.environment}-dot-sdc-cvpep-wydot-bsm"
-    tags           = {
-        Environment = var.environment,
-        Project = var.data_providers[2]["project"],
-        Team = var.data_providers[2]["team"]
-    }
-
-    extended_s3_configuration {
-        bucket_arn         = local.data_lake_bucket_arn
-        buffer_interval    = 60
-        buffer_size        = 5
-        compression_format = "GZIP"
-        kms_key_arn        = var.data_lake_kms_key_arn
-        prefix             = "cv/wydot/BSM/"
-        role_arn           = aws_iam_role.firehose_wydot_bsm_role.arn
-        s3_backup_mode     = "Disabled"
-
-        cloudwatch_logging_options {
-            enabled         = true
-            log_group_name  = "/aws/kinesisfirehose/${var.environment}-dot-sdc-cvpep-wydot-bsm"
-            log_stream_name = "S3Delivery"
-        }
-
-        processing_configuration {
-            enabled = true
-
-            processors {
-                type = "Lambda"
-
-                parameters {
-                    parameter_name  = "LambdaArn"
-                    parameter_value = "${aws_lambda_function.FirehoseReplicatorBSMLambda.arn}:$LATEST"
-                }
-            }
-        }
-    }
-
-    server_side_encryption {
-        enabled = false
-    }
-}
-
-resource "aws_kinesis_firehose_delivery_stream" "kinesis_firehose_wydot_tim" {
-    destination    = "extended_s3"
-    name           = "${var.environment}-dot-sdc-cvpep-wydot-tim"
-    tags           = {
-        Environment = var.environment,
-        Project = var.data_providers[2]["project"],
-        Team = var.data_providers[2]["team"]
-    }
-
-    extended_s3_configuration {
-        bucket_arn         = local.data_lake_bucket_arn
-        buffer_interval    = 60
-        buffer_size        = 5
-        compression_format = "GZIP"
-        kms_key_arn        = var.data_lake_kms_key_arn
-        prefix             = "cv/wydot/TIM/"
-        role_arn           = aws_iam_role.firehose_wydot_tim_role.arn
-        s3_backup_mode     = "Disabled"
-
-        cloudwatch_logging_options {
-            enabled         = true
-            log_group_name  = "/aws/kinesisfirehose/${var.environment}-dot-sdc-cvpep-wydot-tim"
-            log_stream_name = "S3Delivery"
-        }
-
-        processing_configuration {
-            enabled = true
-
-            processors {
-                type = "Lambda"
-
-                parameters {
-                    parameter_name  = "LambdaArn"
-                    parameter_value = "${aws_lambda_function.FirehoseReplicatorTIMLambda.arn}:$LATEST"
-                }
-            }
-        }
-    }
-
-    server_side_encryption {
-        enabled = false
-    }
-}
-
-resource "aws_cloudwatch_metric_alarm" "cw_alarm_firehose_wydot_alert_s3_errors" {
+resource "aws_cloudwatch_metric_alarm" "cw_alarm_firehose_alert_s3_errors" {
+    count = length(var.data_providers)
     actions_enabled           = true
     alarm_actions             = var.cloudwatch_sns_topics
-    alarm_description         = "${var.environment}-dot-sdc-cvpep-wydot-alert-kinesis-firehose-delivery-to-s3-errors"
-    alarm_name                = "${var.environment}-dot-sdc-cvpep-wydot-alert-kinesis-firehose-delivery-to-s3-errors"
+    alarm_description         = "${var.environment}-dot-sdc-${var.data_providers[count.index]["project"]}-${var.data_providers[count.index]["project"]}-alert-kinesis-firehose-delivery-to-s3-errors"
+    alarm_name                = "${var.environment}-dot-sdc-${var.data_providers[count.index]["project"]}-${var.data_providers[count.index]["project"]}-alert-kinesis-firehose-delivery-to-s3-errors"
     comparison_operator       = "LessThanThreshold"
     datapoints_to_alarm       = 1
     dimensions                = {
-        "DeliveryStreamName" = aws_kinesis_firehose_delivery_stream.kinesis_firehose_wydot_alert.name
+        "DeliveryStreamName" = "aws_kinesis_firehose_delivery_stream.kinesis_firehose_OSS4ITS_alert.name"
     }
     evaluation_periods        = 1
     insufficient_data_actions = []
@@ -506,22 +257,24 @@ resource "aws_cloudwatch_metric_alarm" "cw_alarm_firehose_wydot_alert_s3_errors"
     statistic                 = "Average"
     tags           = {
         Environment = var.environment,
-        Project = var.data_providers[2]["project"],
-        Team = var.data_providers[2]["team"]
+        Project = var.data_providers[count.index]["project"],
+        Team = var.data_providers[count.index]["team"]
     }
     threshold                 = 1
     treat_missing_data        = "missing"
 }
 
-resource "aws_cloudwatch_metric_alarm" "cw_alarm_firehose_wydot_alert_errors" {
+resource "aws_cloudwatch_metric_alarm" "cw_alarm_firehose_OSS4ITS_alert_errors" {
+
+    count = length(var.data_providers)
     actions_enabled           = true
     alarm_actions             = var.cloudwatch_sns_topics
-    alarm_description         = "${var.environment}-dot-sdc-cvpep-wydot-alert-kinesis-firehose-errors"
-    alarm_name                = "${var.environment}-dot-sdc-cvpep-wydot-alert-kinesis-firehose-errors"
+    alarm_description         = "${var.environment}-dot-sdc-${var.data_providers[count.index]["project"]}-alert-kinesis-firehose-errors"
+    alarm_name                = "${var.environment}-dot-sdc-${var.data_providers[count.index]["project"]}-alert-kinesis-firehose-errors"
     comparison_operator       = "LessThanThreshold"
     datapoints_to_alarm       = 1
     dimensions                = {
-        "DeliveryStreamName" = aws_kinesis_firehose_delivery_stream.kinesis_firehose_wydot_alert.name
+        "DeliveryStreamName" = "aws_kinesis_firehose_delivery_stream.kinesis_firehose_OSS4ITS_alert.name"
     }
     evaluation_periods        = 1
     insufficient_data_actions = []
@@ -532,112 +285,8 @@ resource "aws_cloudwatch_metric_alarm" "cw_alarm_firehose_wydot_alert_errors" {
     statistic                 = "Average"
     tags           = {
         Environment = var.environment,
-        Project = var.data_providers[2]["project"],
-        Team = var.data_providers[2]["team"]
-    }
-    threshold                 = 1
-    treat_missing_data        = "missing"
-}
-
-resource "aws_cloudwatch_metric_alarm" "cw_alarm_firehose_wydot_bsm_s3_errors" {
-    actions_enabled           = true
-    alarm_actions             = var.cloudwatch_sns_topics
-    alarm_description         = "${var.environment}-dot-sdc-cvpep-wydot-bsm-kinesis-firehose-delivery-to-s3-errors"
-    alarm_name                = "${var.environment}-dot-sdc-cvpep-wydot-bsm-kinesis-firehose-delivery-to-s3-errors"
-    comparison_operator       = "LessThanThreshold"
-    datapoints_to_alarm       = 1
-    dimensions                = {
-        "DeliveryStreamName" = aws_kinesis_firehose_delivery_stream.kinesis_firehose_wydot_bsm.name
-    }
-    evaluation_periods        = 1
-    insufficient_data_actions = []
-    metric_name               = "DeliveryToS3.Success"
-    namespace                 = "AWS/Firehose"
-    ok_actions                = []
-    period                    = 300
-    statistic                 = "Average"
-    tags           = {
-        Environment = var.environment,
-        Project = var.data_providers[2]["project"],
-        Team = var.data_providers[2]["team"]
-    }
-    threshold                 = 1
-    treat_missing_data        = "missing"
-}
-
-resource "aws_cloudwatch_metric_alarm" "cw_alarm_firehose_wydot_bsm_errors" {
-    actions_enabled           = true
-    alarm_actions             = var.cloudwatch_sns_topics
-    alarm_description         = "${var.environment}-dot-sdc-cvpep-wydot-bsm-kinesis-firehose-errors"
-    alarm_name                = "${var.environment}-dot-sdc-cvpep-wydot-bsm-kinesis-firehose-errors"
-    comparison_operator       = "LessThanThreshold"
-    datapoints_to_alarm       = 1
-    dimensions                = {
-        "DeliveryStreamName" = aws_kinesis_firehose_delivery_stream.kinesis_firehose_wydot_bsm.name
-    }
-    evaluation_periods        = 1
-    insufficient_data_actions = []
-    metric_name               = "DescribeDeliveryStream.Requests"
-    namespace                 = "AWS/Firehose"
-    ok_actions                = []
-    period                    = 300
-    statistic                 = "Average"
-    tags           = {
-        Environment = var.environment,
-        Project = var.data_providers[2]["project"],
-        Team = var.data_providers[2]["team"]
-    }
-    threshold                 = 1
-    treat_missing_data        = "missing"
-}
-
-resource "aws_cloudwatch_metric_alarm" "cw_alarm_firehose_wydot_tim_s3_errors" {
-    actions_enabled           = true
-    alarm_actions             = var.cloudwatch_sns_topics
-    alarm_description         = "${var.environment}-dot-sdc-cvpep-wydot-tim-kinesis-firehose-delivery-to-s3-errors"
-    alarm_name                = "${var.environment}-dot-sdc-cvpep-wydot-tim-kinesis-firehose-delivery-to-s3-errors"
-    comparison_operator       = "LessThanThreshold"
-    datapoints_to_alarm       = 1
-    dimensions                = {
-        "DeliveryStreamName" = aws_kinesis_firehose_delivery_stream.kinesis_firehose_wydot_tim.name
-    }
-    evaluation_periods        = 1
-    insufficient_data_actions = []
-    metric_name               = "DeliveryToS3.Success"
-    namespace                 = "AWS/Firehose"
-    ok_actions                = []
-    period                    = 300
-    statistic                 = "Average"
-    tags           = {
-        Environment = var.environment,
-        Project = var.data_providers[2]["project"],
-        Team = var.data_providers[2]["team"]
-    }
-    threshold                 = 1
-    treat_missing_data        = "missing"
-}
-
-resource "aws_cloudwatch_metric_alarm" "cw_alarm_firehose_wydot_tim_errors" {
-    actions_enabled           = true
-    alarm_actions             = var.cloudwatch_sns_topics
-    alarm_description         = "${var.environment}-dot-sdc-cvpep-wydot-tim-kinesis-firehose-errors"
-    alarm_name                = "${var.environment}-dot-sdc-cvpep-wydot-tim-kinesis-firehose-errors"
-    comparison_operator       = "LessThanThreshold"
-    datapoints_to_alarm       = 1
-    dimensions                = {
-        "DeliveryStreamName" = aws_kinesis_firehose_delivery_stream.kinesis_firehose_wydot_tim.name
-    }
-    evaluation_periods        = 1
-    insufficient_data_actions = []
-    metric_name               = "DescribeDeliveryStream.Requests"
-    namespace                 = "AWS/Firehose"
-    ok_actions                = []
-    period                    = 300
-    statistic                 = "Average"
-    tags           = {
-        Environment = var.environment,
-        Project = var.data_providers[2]["project"],
-        Team = var.data_providers[2]["team"]
+        Project = var.data_providers[count.index]["project"],
+        Team = var.data_providers[count.index]["team"]
     }
     threshold                 = 1
     treat_missing_data        = "missing"

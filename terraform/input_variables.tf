@@ -63,7 +63,7 @@ variable "mirror_account_number" {
 
 locals {
   team_global_tags = {
-      SourceRepo = "sdc-dot-cvp-ingest"
+      SourceRepo = "sdc-dot-oss4its-ingest"
       Environment = var.environment
   }
   global_tags = merge(local.team_global_tags, {
@@ -73,6 +73,6 @@ locals {
   })
   data_lake_bucket_arn = "arn:aws:s3:::${var.data_lake_bucket}"
 
-  mirror_raw_bucket_name = "${var.environment}-dot-sdc-raw-submissions-${var.mirror_account_number}-us-east-1"
-  mirror_raw_bucket_arn = "arn:aws:s3:::${local.mirror_raw_bucket_name}"
+  mirror_raw_bucket_name = "${var.environment}-dot-sdc-raw-submissions-var.505135622787-us-east-1"
+  mirror_raw_bucket_arn = "arn:aws:kms:us-east-1:505135622787:key/a5480c3b-e32b-44f4-b9c4-4804b2ff331e"
 }

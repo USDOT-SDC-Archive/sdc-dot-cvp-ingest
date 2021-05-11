@@ -5,4 +5,4 @@ fi
 
 zip -r data_processor.zip data_processor.py
 
-aws s3 cp --profile sdc data_processor.zip s3://$1-dot-sdc-regional-lambda-bucket-911061262852-us-east-1/sdc-dot-cvp-ingest/data_processor.zip --region us-east-1 --acl public-read
+aws s3 cp data_processor.zip s3://$1-lambda-bucket-505135622787/sdc-dot-oss4its-ingest/data_processor.zip --region us-east-1

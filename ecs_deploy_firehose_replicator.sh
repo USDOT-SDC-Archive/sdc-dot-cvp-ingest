@@ -38,7 +38,7 @@ popd
 
 # Push zipped files up to S3
 echo "Copying to s3..."
-aws s3 cp $ZIP_NAME s3://$1-lambda-bucket-$ACCT_NUM/sdc-dot-cvp-ingest/$ZIP_NAME --region us-east-1
+aws s3 cp $ZIP_NAME s3://$1-lambda-bucket-$ACCT_NUM/sdc-dot-oss4its-ingest/$ZIP_NAME --region us-east-1
 
 echo ""
 echo "Done!"

@@ -1,14 +1,14 @@
 data "aws_s3_bucket_object" "lambda_zip" {
-  bucket = var.lambda_binary_bucket
-  key = "sdc-dot-cvp-ingest/data_processor.zip"
+   bucket = var.lambda_binary_bucket
+  key = "sdc-dot-${var.data_providers[0]["project"]}-ingest/data_processor.zip"
 }
 
 resource "aws_lambda_function" "IngestLambda" {
     count = length(var.data_providers)
     s3_bucket = data.aws_s3_bucket_object.lambda_zip.bucket
-    s3_key = data.aws_s3_bucket_object.lambda_zip.key
+    s3_key =  data.aws_s3_bucket_object.lambda_zip.key
     s3_object_version = data.aws_s3_bucket_object.lambda_zip.version_id
-    function_name = "${var.environment}-dot-sdc-${var.data_providers[count.index]["name"]}-manual-ingest"
+    function_name = "${var.environment}-dot-sdc-${var.data_providers[count.index]["name"]}-ingest"
     role = aws_iam_role.IngestLambdaRole[count.index].arn
     handler = "data_processor.lambda_handler"
     runtime = "python3.7"
@@ -26,6 +26,7 @@ resource "aws_lambda_function" "IngestLambda" {
         security_group_ids = [aws_security_group.lambda_http_egress.id]
         subnet_ids = var.subnet_ids
     }
+depends_on = [aws_iam_role.IngestLambdaRole,aws_iam_role_policy_attachment.CloudWatchLogsAttachment]
 }
 
 resource "aws_cloudwatch_metric_alarm" "IngestLambdaErrors" {
@@ -45,7 +46,7 @@ resource "aws_cloudwatch_metric_alarm" "IngestLambdaErrors" {
   statistic = "Average"
   
   alarm_actions = var.lambda_error_actions
-  tags = merge({Name = var.data_providers[count.index]["ingest_bucket"],
+  tags = merge({Name = var.data_providers[count.index]["name"],
               Team = var.data_providers[count.index]["team"],
               Project = var.data_providers[count.index]["project"]}, local.team_global_tags)
 }
@@ -127,7 +128,7 @@ resource "aws_iam_policy" "LambdaPermissions" {
       "Sid": "AllowPushToMirrorRawSubmission",
       "Effect": "Allow",
       "Action": [
-        "s3:GetObject",
+       "s3:GetObject",
         "s3:PutObject",
         "s3:PutObjectAcl",
         "s3:PutObjectVersionAcl",

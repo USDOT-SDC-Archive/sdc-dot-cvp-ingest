@@ -18,8 +18,8 @@ resource "aws_iam_role" "firehose_replicator_role" {
   EOF
 }
 
-resource "aws_iam_policy" "put_ecs_raw_submissions_policy" {
-  name        = "${var.environment}-put-ecs-raw-submissions"
+resource "aws_iam_policy" "put_ecs_oss_raw_submissions_policy" {
+  name        = "${var.environment}-put-ecs-oss-raw-submissions"
   description = "Allows putting objects in the ECS raw submissions bucket."
 
   policy = <<-EOF
@@ -42,8 +42,8 @@ resource "aws_iam_policy" "put_ecs_raw_submissions_policy" {
 }
 
 # Special policy for lambdas running in VPC. All lambdas will run in VPC.
-resource "aws_iam_policy" "vpc_access_policy" {
-  name        = "${var.environment}-cvp-ingest-lambda-vpc-policy"
+resource "aws_iam_policy" "vpc_oss_access_policy" {
+  name        = "${var.environment}-oss4its-ingest-lambda-vpc-policy"
   description = "Policy to allow lambdas to run in a VPC."
 
   policy = <<-EOF
@@ -88,8 +88,8 @@ resource "aws_iam_policy" "vpc_access_policy" {
 }
 
 # Allow CW put/get
-resource "aws_iam_policy" "lambda_cloudwatch_policy" {
-  name        = "${var.environment}-cvp-ingest-lambda-cw-policy"
+resource "aws_iam_policy" "lambda_oss_cloudwatch_policy" {
+  name        = "${var.environment}-oss4its-ingest-lambda-cw-policy"
   description = "Permissions for CW metrics and logs."
 
   policy = <<-EOF
@@ -114,15 +114,15 @@ resource "aws_iam_policy" "lambda_cloudwatch_policy" {
 }
 
 # Attach policies to role
-resource "aws_iam_role_policy_attachment" "put_ecs_policy_to_replicator_role" {
+resource "aws_iam_role_policy_attachment" "put_ecs_oss_policy_to_replicator_role" {
   role       = aws_iam_role.firehose_replicator_role.name
-  policy_arn = aws_iam_policy.put_ecs_raw_submissions_policy.arn
+  policy_arn = aws_iam_policy.put_ecs_oss_raw_submissions_policy.arn
+} 
+resource "aws_iam_role_policy_attachment" "cw_policy_oss_to_replicator_role" {
+  role       = aws_iam_role.firehose_replicator_role.name
+  policy_arn = aws_iam_policy.lambda_oss_cloudwatch_policy.arn
 }
-resource "aws_iam_role_policy_attachment" "cw_policy_to_replicator_role" {
+resource "aws_iam_role_policy_attachment" "vpc_policy_oss_to_replicator_role" {
   role       = aws_iam_role.firehose_replicator_role.name
-  policy_arn = aws_iam_policy.lambda_cloudwatch_policy.arn
-}
-resource "aws_iam_role_policy_attachment" "vpc_policy_to_replicator_role" {
-  role       = aws_iam_role.firehose_replicator_role.name
-  policy_arn = aws_iam_policy.vpc_access_policy.arn
+  policy_arn = aws_iam_policy.vpc_oss_access_policy.arn
 }
