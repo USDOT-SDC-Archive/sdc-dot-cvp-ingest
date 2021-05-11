@@ -6,7 +6,7 @@ from moto import mock_s3
 from firehose_replicator import firehose_replicator
 
 ECS_BUCKET_NAME = "the-ecs-bucket"
-ECS_OBJECT_PREFIX = "cv/oss4its"
+ECS_OBJECT_PREFIX = "cv/wydot"
 os.environ["ECS_BUCKET_NAME"] = ECS_BUCKET_NAME
 os.environ["ECS_OBJECT_PREFIX"] = ECS_OBJECT_PREFIX
 

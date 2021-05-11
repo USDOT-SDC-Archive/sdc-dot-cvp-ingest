@@ -1,5 +1,5 @@
 resource "aws_security_group" "lambda_http_egress" {
-  name = "${var.environment}-ingest-lambda-security-group"
+  name = "${var.environment}-manual-ingest-lambda-security-group"
   description = "Allow network access from a Lambda"
   vpc_id = var.vpc_id
   egress {
