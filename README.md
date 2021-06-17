@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/usdot-jpo-sdc/sdc-dot-cvp-ingest.svg?branch=master)](https://travis-ci.org/usdot-jpo-sdc/sdc-dot-cvp-ingest)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=usdot-jpo-sdc_sdc-dot-cvp-ingest&metric=alert_status)](https://sonarcloud.io/dashboard?id=usdot-jpo-sdc_sdc-dot-cvp-ingest)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=usdot-jpo-sdc_sdc-dot-cvp-ingest&metric=coverage)](https://sonarcloud.io/dashboard?id=usdot-jpo-sdc_sdc-dot-cvp-ingest)
+[![Build Status](https://travis-ci.org/USDOT-SDC/sdc-dot-cvp-ingest.svg?branch=master)](https://travis-ci.org/usdot-jpo-sdc/sdc-dot-cvp-ingest)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KBRPurchase1_sdc-dot-cvp-ingest&metric=alert_status)](https://sonarcloud.io/dashboard?id=KBRPurchase1_sdc-dot-cvp-ingest)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=KBRPurchase1_sdc-dot-cvp-ingest&metric=coverage)](https://sonarcloud.io/dashboard?id=KBRPurchase1_sdc-dot-cvp-ingest)
 
 # sdc-dot-cvp-ingest
 
