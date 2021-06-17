@@ -17,4 +17,4 @@ script:
     - coverage erase
     - coverage run -m pytest tests/
     - coverage xml -i
-    - sonar-scanner -X -D sonar.login=$SONAR_TOKEN
+    - sonar-scanner -X -D sonar.login=58d512fb2a46eecd56a07c01e217a87ee93e3b2a
