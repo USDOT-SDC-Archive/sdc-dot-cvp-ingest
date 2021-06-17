@@ -9,9 +9,10 @@ branches:
     only:
         - master
         - develop
+        - SDC-3960
 addons:
     sonarcloud:
-        organization: "usdot-jpo-sdc"
+        organization: "kbrpurchase1"
 script: 
     - coverage erase
     - coverage run -m pytest tests/
